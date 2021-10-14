@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ID.Models.Volunteers>
+@{
+    ViewBag.Title = "Volunteers";
+}
+<h2>Volunteers</h2>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Search by Volunteer Name: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.VolunteerId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VolFName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.VolLName)
+        </th>
+
+
+
+    </tr>
+    @foreach (var vol in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => vol.VolunteerId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => vol.VolFName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => vol.VolLName)
+            </td>
+
+
+            <td>
+
+                <a asp-action="Edit" asp-route-id="@vol.VolunteerId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@vol.VolunteerId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@vol.VolunteerId">Delete</a>
+            </td>
+
+
+        </tr>
+    }
+</table>

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ID.Models.Supplier>
+@{
+    ViewBag.Title = "Partners";
+}
+<h2>Partners</h2>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Search by Partner's Name: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+        Search by Location: @Html.TextBox("SearchLocation")
+        <input type="submit" value="Search" />
+
+    </p>
+
+    <div>
+        <a asp-action="Create">Add new partner</a>
+    </div>
+}
+<table class="table">
+    <tr>
+
+        @*<th>
+                @Html.DisplayNameFor(model => model.SupplierID)
+            </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.SupplierName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SupplierAddress)
+        </th>
+
+
+
+    </tr>
+    @foreach (var pt in Model)
+    {
+        <tr>
+            @*<td>
+                    @Html.DisplayFor(modelItem => pt.SupplierID)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => pt.SupplierName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => pt.SupplierAddress)
+            </td>
+            <td>
+            <td>
+                <img src="~/images/@pt.Pic" class="rounded-circle" width="80" height="80" asp-append-version="true" />
+            </td>
+
+            </td>
+            <td>
+                @*<a asp-action="Create" asp-route-id="@pt.SupplierID">Create</a> |*@
+                <a asp-action="Edit" asp-route-id="@pt.SupplierID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@pt.SupplierID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@pt.SupplierID">Delete</a>
+            </td>
+
+
+        </tr>
+    }
+</table>

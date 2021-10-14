@@ -1,0 +1,4 @@
+﻿<div class="container">
+@Html.ActionLink("Cart " + ViewData["CartCount"] + "", "Index", "ShoppingCart", new { id = "cart-status" })
+        <img src="~/images/cart.jfif" class="rounded-circle" width="40" height="40" asp-append-version="true" />
+</div>

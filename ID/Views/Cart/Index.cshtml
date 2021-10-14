@@ -1,0 +1,51 @@
+﻿
+<!DOCTYPE html>
+
+    <html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Index</title>
+    </head>
+
+    <body>
+        <h2>Cart</h2>
+        <table class="table">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+
+            </tr>
+            @foreach (var item in ViewBag.cart)
+            {
+                <tr>
+                    <td>
+                        @item.packages.PackageNameId
+
+                    </td>
+                    <td>
+                        @item.packages.PackageDetail
+                    </td>
+
+                    <td> @item.packages.PackageType</td>
+
+                    <td>  @item.packages.PackagePrice</td>
+                    <td>
+                        <img src="~/images/@item.packages.Pic" class="rounded-circle" width="80" height="80" />
+                    </td>
+                    <td>
+                        <a asp-controller="Cart" asp-action="Buy" asp-route-id="">Add To Cart</a>
+                    </td>
+                    <td>@item.Qty</td>
+                    <td>@(item.packages.PackagePrice * item.Qty)</td>
+                </tr>
+            }
+        </table>
+
+
+    </body>
+    </html>

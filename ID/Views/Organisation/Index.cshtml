@@ -1,0 +1,59 @@
+﻿@model IEnumerable<ID.Models.Organisation>
+@{
+    ViewBag.Title = "Organisations";
+}
+<h2>Food Service Organisations</h2>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Search Organisations: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+        Search by Location: @Html.TextBox("SearchLocation")
+        <input type="submit" value="Search" />
+    </p>
+}
+<div>
+    <a asp-action="Create">Add new organisation</a>
+</div>
+<table class="table">
+    <tr>
+
+        <th>
+            @Html.DisplayNameFor(model => model.OrganisationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganisationAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Pic)
+        </th>
+
+
+    </tr>
+    @foreach (var org in Model)
+    {
+        <tr>
+            @*<td>
+                    @Html.DisplayFor(modelItem => org.OrganisationID)
+                </td>*@
+            <td>
+                @Html.DisplayFor(modelItem => org.OrganisationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => org.OrganisationAddress)
+            </td>
+            <td>
+                <img src="~/images/@org.Pic" class="rounded-circle" width="80" height="80" asp-append-version="true" />
+            </td>
+            <td>
+               
+                <a asp-action="Edit" asp-route-id="@org.OrganisationID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@org.OrganisationID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@org.OrganisationID">Delete</a>
+            </td>
+
+
+        </tr>
+    }
+</table>

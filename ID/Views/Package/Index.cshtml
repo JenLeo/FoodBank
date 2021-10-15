@@ -74,10 +74,13 @@
             </td>
 
             <td>
-                @*<a asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-id="@packages.PackageID">Add To Cart</a>*@
                 <p class="button">
-                 @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = @packages.PackageID }, "")
+                    <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
+                       asp-route-PackageID="@packages.PackageID">Add to cart</a>
                 </p>
+                @*<p class="button">
+                 @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = @packages.PackageID }, "")
+                </p>*@
                 <a asp-action="Edit" asp-route-id="@packages.PackageID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@packages.PackageID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@packages.PackageID">Delete</a>

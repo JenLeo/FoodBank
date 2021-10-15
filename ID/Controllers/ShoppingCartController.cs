@@ -20,89 +20,134 @@ namespace ID.Controllers
 {
     public class ShoppingCartController : Controller
     {
+        private readonly IPackageRepository _packageRepository;
+        private readonly ShoppingCart _shoppingCart;
 
-
-        readonly AppDbContext apDB = new AppDbContext();
-        
-        // GET: /ShoppingCart/
-        public ActionResult Index()
+        public ShoppingCartController(IPackageRepository iPackageRepository, ShoppingCart shoppingCart)
         {
-            var cart = ShoppingCart.GetCart(this.HttpContext);
-
-            // Set up our ViewModel
-            var viewModel = new ShoppingCartViewModel
-            {   
-                CartItems = cart.GetCartItems(),
-                CartTotal = cart.GetTotal()
-            };
-            // Return the view
-            return View(viewModel);
+            _packageRepository = iPackageRepository;
+            _shoppingCart = shoppingCart;
         }
-        //
-        // GET: /Package/AddToCart/5
-        public ActionResult AddToCart(string id)
+
+
+        public IActionResult Index()
         {
-            // Retrieve the album from the database
+            var items = _shoppingCart.GetShoppingCartItems();
+            _shoppingCart.ShoppingCartItems = items;
 
-            var addedPackage = apDB.Package1
-                .SingleOrDefault(package => package.PackageID == id);
+            var shoppingCartViewModel = new ShoppingCartViewModel
+            {
+                ShoppingCart = _shoppingCart,
+                CartTotal = _shoppingCart.GetShoppingCartTotal()
+            };
 
-            // Add it to the shopping cart
-            var cart = ShoppingCart.GetCart(this.HttpContext);
+            return View(shoppingCartViewModel);
+        }
 
-            cart.AddToCart(addedPackage);
+        public IActionResult AddToShoppingCart(string PackageID)
+        {
+            var selectedPackage = _packageRepository.Package.FirstOrDefault(p => p.PackageID == PackageID);
 
-            // Go back to the main store page for more shopping
+            if (selectedPackage != null)
+            {
+                _shoppingCart.AddToCart(selectedPackage, 1);
+            }
             return RedirectToAction("Index");
         }
-        //
-        // AJAX: /ShoppingCart/RemoveFromCart/5
-        [HttpPost]
-        public ActionResult RemoveFromCart(string id)
+
+        public IActionResult RemoveFromShoppingCart(string PackageID)
         {
-            // Remove the item from the cart
-            var cart = ShoppingCart.GetCart(this.HttpContext);
+            var selectedPackage = _packageRepository.Package.FirstOrDefault(p => p.PackageID == PackageID);
 
-            // Get the name of the package to display confirmation
-
-            string item = apDB.Carts
- .Single(item => item.PackageID == id).Packages.PackageNameId;
-
-            // Remove from cart
-            int itemCount = cart.RemoveFromCart(id);
-
-            // Display the confirmation message
-            var results = new ShoppingCartRemoveModel
+            if (selectedPackage!= null)
             {
-                //Message = Server.HtmlEncode(packageName) +
-                //    " has been removed from your shopping cart.",
-                CartTotal = cart.GetTotal(),
-                CartCount = cart.GetCount(),
-                ItemCount = itemCount,
-                DeleteId = id
-            };
-            return Json(results);
+                _shoppingCart.RemoveFromCart(selectedPackage);
+            }
+            return RedirectToAction("Index");
         }
-        //GET: /ShoppingCart/CartSummary
-        public ActionResult CartSummary()
-        {
-            var cart = ShoppingCart.GetCart(this.HttpContext);
 
-            // Set up our ViewModel
-            var viewModel = new ShoppingCartViewModel
-            {
-                CartItems = cart.GetCartItems(),
-                CartTotal = cart.GetTotal()
-            };
-            // Return the view
-            return PartialView(viewModel);
-        }
-        //public ActionResult CartSummary()
-        //{
-        //    var cart = ShoppingCart.GetCart(this.HttpContext);
-
-        //    ViewData["CartCount"] = cart.GetCount();
-        //    return PartialView("CartSummary");
-        //}
     }
+
+    //       readonly AppDbContext apDB = new AppDbContext();
+
+    //       // GET: /ShoppingCart/
+    //       public ActionResult Index()
+    //       {
+    //           var cart = ShoppingCart.GetCart(this.HttpContext);
+
+    //           // Set up our ViewModel
+    //           var viewModel = new ShoppingCartViewModel
+    //           {   
+    //               CartItems = cart.GetCartItems(),
+    //               CartTotal = cart.GetTotal()
+    //           };
+    //           // Return the view
+    //           return View(viewModel);
+    //       }
+    //       //
+    //       // GET: /Package/AddToCart/5
+    //       public ActionResult AddToCart(string id)
+    //       {
+    //           // Retrieve the album from the database
+
+    //           var addedPackage = apDB.Package1
+    //               .SingleOrDefault(package => package.PackageID == id);
+
+    //           // Add it to the shopping cart
+    //           var cart = ShoppingCart.GetCart(this.HttpContext);
+
+    //           cart.AddToCart(addedPackage);
+
+    //           // Go back to the main store page for more shopping
+    //           return RedirectToAction("Index");
+    //       }
+    //       //
+    //       // AJAX: /ShoppingCart/RemoveFromCart/5
+    //       [HttpPost]
+    //       public ActionResult RemoveFromCart(string id)
+    //       {
+    //           // Remove the item from the cart
+    //           var cart = ShoppingCart.GetCart(this.HttpContext);
+
+    //           // Get the name of the package to display confirmation
+
+    //           string item = apDB.Carts
+    //.Single(item => item.PackageID == id).Packages.PackageNameId;
+
+    //           // Remove from cart
+    //           int itemCount = cart.RemoveFromCart(id);
+
+    //           // Display the confirmation message
+    //           var results = new ShoppingCartRemoveModel
+    //           {
+    //               //Message = Server.HtmlEncode(packageName) +
+    //               //    " has been removed from your shopping cart.",
+    //               CartTotal = cart.GetTotal(),
+    //               CartCount = cart.GetCount(),
+    //               ItemCount = itemCount,
+    //               DeleteId = id
+    //           };
+    //           return Json(results);
+    //       }
+    //       //GET: /ShoppingCart/CartSummary
+    //       public ActionResult CartSummary()
+    //       {
+    //           var cart = ShoppingCart.GetCart(this.HttpContext);
+
+    //           // Set up our ViewModel
+    //           var viewModel = new ShoppingCartViewModel
+    //           {
+    //               CartItems = cart.GetCartItems(),
+    //               CartTotal = cart.GetTotal()
+    //           };
+    //           // Return the view
+    //           return PartialView(viewModel);
+    //       }
+    //public ActionResult CartSummary()
+    //{
+    //    var cart = ShoppingCart.GetCart(this.HttpContext);
+
+    //    ViewData["CartCount"] = cart.GetCount();
+    //    return PartialView("CartSummary");
+    //}
 }

@@ -20,6 +20,13 @@ namespace ID.Models
         {
             return _context.Package1.ToList();
         }
+        public IEnumerable<Packages> Package
+        {
+            get
+            {
+                return _context.Package1.ToList();
+            }
+        }
 
         public void InsertPackage(Packages package)
         {
@@ -55,7 +62,8 @@ namespace ID.Models
                 PackageNameId = _package.PackageNameId,
                 PackageDetail = _package.PackageDetail,
                 PackageType = _package.PackageType,
-                PackagePrice = _package.PackagePrice
+                PackagePrice = _package.PackagePrice,
+                Pic = _package.Pic
                 
 
             };
@@ -96,6 +104,7 @@ namespace ID.Models
             pk.PackageDetail = _package.PackageDetail;
             pk.PackageType = _package.PackageType;
             pk.PackagePrice = _package.PackagePrice;
+            pk.Pic = _package.Pic;
             
 
 

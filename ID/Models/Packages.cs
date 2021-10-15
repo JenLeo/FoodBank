@@ -10,17 +10,13 @@ using System.Threading.Tasks;
 
 namespace ID.Models
 {
-
+    //[Keyless]
+    
     public class Packages
     {
-        //private readonly AppDbContext _ap = new AppDbContext();
-        //public List<Packages> packages
-        //{
-        //    get; set;
-        //}
 
         [Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Package ID: ")]
         public string PackageID { get; set; }
 
@@ -49,11 +45,8 @@ namespace ID.Models
     
         public string Pic { get; set; }
 
-        public static implicit operator Packages(List<Packages> v)
-        {
-            throw new NotImplementedException();
-        }
-        //public ICollection<Cart> Cart { get; set; }
+   
+    
     }
     public enum PackageTypes
     {

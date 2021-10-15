@@ -40,10 +40,6 @@ namespace ID.Models
         public string City { get; set; }
 
 
-        //[Required(ErrorMessage = "State is required")]
-        //[StringLength(40)]
-        //public string State { get; set; }
-
         [Required(ErrorMessage = "PostCode is required")]
         [StringLength(24)]
         [DisplayName("Postal Code")]

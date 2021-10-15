@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ID.Models
 {
-    internal interface IPackageRepository : IDisposable
+    public interface IPackageRepository : IDisposable
     {
         IEnumerable<Packages> GetPackage();
 
+        IEnumerable<Packages> Package { get; }
         void InsertPackage(Packages package);
 
         void Save();

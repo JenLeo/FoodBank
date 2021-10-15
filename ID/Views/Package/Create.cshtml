@@ -25,12 +25,13 @@
                 <span asp-validation-for="PackageDetail" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="PackageType" class="control-label"></label>
                 @Html.DropDownListFor(m => m.PackageType,
             new SelectList(Enum.GetValues(typeof(PackageTypes))),
             "Select Type")
-                <label asp-for="PackageType" class="control-label"></label>
+                <!--<label asp-for="PackageType" class="control-label"></label>-->
                 @*@Html.DropDownList("PackageType")*@
-                <input asp-for="PackageType" class="form-control" />
+                <!--<input asp-for="PackageType" class="form-control" />-->
                 <span asp-validation-for="PackageType" class="text-danger"></span>
             </div>
             <div class="form-group">

@@ -9,8 +9,8 @@ namespace ID.Models
     {
 
 
-        public List<Cart> CartItems { get; set;  }
-
+        //public List<Cart> CartItems { get; set;  }
+        public ShoppingCart ShoppingCart { get; set; }
         //public ShoppingCartViewModel()
         //{
         //    this.CartItems = new List<Cart>();

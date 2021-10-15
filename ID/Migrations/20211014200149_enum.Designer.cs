@@ -4,14 +4,16 @@ using ID;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211014200149_enum")]
+    partial class @enum
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,8 +23,16 @@ namespace ID.Migrations
 
             modelBuilder.Entity("ID.Models.Cart", b =>
                 {
+                    b.Property<int>("TypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AddedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("CartId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
@@ -30,10 +40,12 @@ namespace ID.Migrations
                     b.Property<string>("PackageID")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TypeId")
-                        .HasColumnType("int");
+                    b.Property<string>("PackagesPackageID")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("CartId");
+                    b.HasKey("TypeId");
+
+                    b.HasIndex("PackagesPackageID");
 
                     b.ToTable("Carts");
                 });
@@ -98,6 +110,37 @@ namespace ID.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("ID.Models.OrderDetail", b =>
+                {
+                    b.Property<int>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PackageID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PackagesPackageID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PackagesPackageID");
+
+                    b.ToTable("OrderDetails");
+                });
+
             modelBuilder.Entity("ID.Models.Organisation", b =>
                 {
                     b.Property<string>("OrganisationID")
@@ -116,6 +159,31 @@ namespace ID.Migrations
                     b.HasKey("OrganisationID");
 
                     b.ToTable("Organisations");
+                });
+
+            modelBuilder.Entity("ID.Models.Packages", b =>
+                {
+                    b.Property<string>("PackageID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PackageDetail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PackageNameId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PackagePrice")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PackageType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Pic")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PackageID");
+
+                    b.ToTable("Package1");
                 });
 
             modelBuilder.Entity("ID.Models.Supplier", b =>
@@ -295,10 +363,12 @@ namespace ID.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -335,10 +405,12 @@ namespace ID.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -346,6 +418,32 @@ namespace ID.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("ID.Models.Cart", b =>
+                {
+                    b.HasOne("ID.Models.Packages", "Packages")
+                        .WithMany()
+                        .HasForeignKey("PackagesPackageID");
+
+                    b.Navigation("Packages");
+                });
+
+            modelBuilder.Entity("ID.Models.OrderDetail", b =>
+                {
+                    b.HasOne("ID.Models.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ID.Models.Packages", "Packages")
+                        .WithMany()
+                        .HasForeignKey("PackagesPackageID");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Packages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -397,6 +495,11 @@ namespace ID.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ID.Models.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 #pragma warning restore 612, 618
         }

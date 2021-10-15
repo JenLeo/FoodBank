@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ID.Models
 {
+    [NotMapped]
     public class OrderDetail
     {
         [Key]

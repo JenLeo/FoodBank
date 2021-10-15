@@ -22,24 +22,21 @@ namespace ID.Controllers
    
     public class PackageController : Controller
     {
+        private readonly IPackageRepository _PackageRepository;
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment webHostEnv;
 
-        public PackageController(IConfiguration configuration, IOptions<GlobalData> globalData, AppDbContext Context, Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnv
-            )
+      
+        public PackageController(
+            IPackageRepository packageRepository,
+            AppDbContext Context,
+            Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnv
+         )
         {
+            _PackageRepository = packageRepository;
             _context = Context;
-            try
-            {
-                _context.Database.EnsureCreated();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
             this.webHostEnv = webHostEnv;
         }
-
 
         public async Task<IActionResult> Index(string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {

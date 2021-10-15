@@ -1,11 +1,17 @@
 ﻿@model ShoppingCartViewModel
 
-<h2>Your shopping cart</h2>
+<h2>Cart Items</h2>
+
+<div class="text-sm-left">
+    <a class="btn btn-primary" asp-controller="Package" asp-action="Index"> << Continue Shopping</a>
+
+</div>
+
 
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
-            <th>Selected amount</th>
+            <th>Quantity</th>
             <th>Package</th>
             <th class="text-right">Price</th>
             <th class="text-right">Subtotal</th>
@@ -15,15 +21,21 @@
         @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
         {
 
-        <tr>
-            <td class="text-center">@item.Count</td>
-            
-            <td class="text-left">@item.Package.PackageNameId</td>
-            <td class="text-right">@item.Package.PackagePrice.ToString("c")</td>
-            <td class="text-right">
-                @((item.Count * item.Package.PackagePrice).ToString("c"))
-            </td>
-        </tr>
+            <tr>
+                <td class="text-center">@item.Count</td>
+
+                <td class="text-left">@item.Package.PackageNameId</td>
+                <td class="text-right">@item.Package.PackagePrice.ToString("c")</td>
+                <td class="text-right">
+                    @((item.Count * item.Package.PackagePrice).ToString("c"))
+                </td>
+                <td>
+                    <p class="button">
+                        <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="RemoveFromShoppingCart"
+                           asp-route-PackageId="@item.Package.PackageId">Remove From Cart</a>
+                    </p>
+                </td>
+            </tr>
         }
     </tbody>
     <tfoot>
@@ -36,10 +48,7 @@
     </tfoot>
 </table>
 
-<div class="text-left">
-    <a class="btn btn-primary" asp-controller="Package" asp-action="Index">Continue Shopping</a>
-</div>
 
-<div class="text-right">
-    <a class="btn btn-primary" asp-controller="Checkout" asp-action="CheckOut">CheckOut</a>
+<div class="text-md-right">
+    <a class="btn btn-primary" asp-controller="Checkout" asp-action="CheckOut">Checkout >> </a>
 </div>

@@ -1,0 +1,39 @@
+﻿@model ID.Models.Volunteers
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="VolunteerId" />
+            
+            <div class="form-group">
+                <label asp-for="VolFName" class="control-label"></label>
+                <input asp-for="VolFName" class="form-control" />
+                <span asp-validation-for="VolFName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VolLName" class="control-label"></label>
+                <input asp-for="VolLName" class="form-control" />
+                <span asp-validation-for="VolLName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

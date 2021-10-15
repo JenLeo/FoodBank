@@ -1,15 +1,9 @@
-﻿
-@model PaginatedList<ID.Models.Package>
-
+﻿@model PaginatedList<ID.Models.Package>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Packages";
 }
-<h2>Packages</h2>
-
-<div>
-    <a asp-action="Create">Add new package</a>
-</div>
+<h3>Packages</h3>
 
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
@@ -21,32 +15,30 @@
     </div>
 </form>
 <table class="table">
-
     <tr>
 
         <th>
-
+            @*<a asp-page="./Index" asp-route-sortOrder="@Model.NameSort">
+                @Html.DisplayNameFor(model => model.Packages[0].PackageNameId)
+            </a>*@
             <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Package</a>
-            
-
         </th>
+        @*<th> @Html.DisplayNameFor(model => model.Packages[0].PackageDetail)</th>*@
         <th>
-            Description
-
-        </th>
+                Description
+            </th>
         <th>
+            @*<a asp-page="./Index" asp-route-sortOrder="@Model.TypeSort">
+                @Html.DisplayNameFor(model => model.Packages[0].PackageType)
+            </a>*@
             <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Type</a>
-
         </th>
-
         <th>
+            @*<a asp-page="./Index" asp-route-sortOrder="@Model.PriceSort">
+                @Html.DisplayNameFor(model => model.Packages[0].PackagePrice)
+            </a>*@
             <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
-
-
         </th>
-
-
-
 
     </tr>
     @foreach (var packages in Model)
@@ -78,9 +70,6 @@
                     <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
                        asp-route-PackageID="@packages.PackageId">Add to cart</a>
                 </p>
-                @*<p class="button">
-                 @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = @packages.PackageID }, "")
-                </p>*@
                 <a asp-action="Edit" asp-route-id="@packages.PackageId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@packages.PackageId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@packages.PackageId">Delete</a>
@@ -112,3 +101,6 @@
    class="btn btn-default @nextDisabled">
     Next
 </a>
+<div class="text-right">
+    <a asp-action="Create">Add new package</a>
+</div>

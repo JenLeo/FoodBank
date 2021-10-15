@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ID.Models
 {
-    [NotMapped]
+    
     public class OrderDetail
     {
+        
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string OrderDetailId { get; set; }
         
         public string OrderId { get; set; }

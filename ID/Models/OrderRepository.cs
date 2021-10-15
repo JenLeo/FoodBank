@@ -15,6 +15,14 @@ namespace ID.Models
             _appDbContext = appDbContext;
             _shoppingCart = shoppingCart;
         }
+        public IEnumerable<Order> GetOrders()
+        {
+            return _appDbContext.Orders.ToList();
+        }
+        public IQueryable<Order> GetAll()
+        {
+            return _appDbContext.Orders.AsQueryable();
+        }
 
         public void CreateOrder(Order order)
         {

@@ -8,5 +8,9 @@ namespace ID.Models
     public interface IOrderRepository
     {
         void CreateOrder(Order order);
+
+        IEnumerable<Order> GetOrders();
+
+        IQueryable<Order> GetAll();
     }
 }

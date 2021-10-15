@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ID.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -45,16 +46,17 @@ namespace ID.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                vols = vols.Where(s => s.VolFName.Contains(searchString));
+                vols = vols.Where(v => v.VolFName.Contains(searchString) || v.VolLName.Contains(searchString)
+                || v.VolunteerId.Contains(searchString));
             }
 
             return View(await vols.ToListAsync());
         }
 
         // GET: Volunteer/Details/5
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Details(string id)
         {
-            if (id == 0)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -70,7 +72,7 @@ namespace ID.Controllers
        
 
         // GET: VolunteerController/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -78,58 +80,97 @@ namespace ID.Controllers
         // POST: VolunteerController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create(Volunteers volunteer)
         {
-            try
+
+            var vol = new Volunteers
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+                VolunteerId = volunteer.VolunteerId,
+                VolFName = volunteer.VolFName,
+                VolLName = volunteer.VolLName,
+               
+            };
+            _context.Volunteer.Add(vol);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+
         }
 
-        // GET: VolunteerController/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
         {
-            return View();
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var _vol = await _context.Volunteer.FindAsync(id);
+            if (_vol == null)
+            {
+                return NotFound();
+            }
+            return View(_vol);
         }
 
-        // POST: VolunteerController/Edit/5
+        // POST: VolunteerrController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<IActionResult> Edit(string id, [Bind("VolunteerId,VolFName,VolLName")] Volunteers volunteer)
         {
-            try
+            if (id != volunteer.VolunteerId)
             {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(volunteer);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ItemExists(volunteer.VolunteerId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
+            return View(volunteer);
+        }
+
+        private bool ItemExists(string volunteerId)
+        {
+            throw new NotImplementedException();
         }
 
         // GET: VolunteerController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            return View();
+
+            var vol = await _context.Volunteer
+                .FirstOrDefaultAsync(v => v.VolunteerId == id);
+
+
+            return View(vol);
         }
 
         // POST: VolunteerController/Delete/5
-        [HttpPost]
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<IActionResult> DeleteConfirmed(string Id)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            var vol = await _context.Volunteer.FindAsync(Id);
+            _context.Volunteer.Remove(vol);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

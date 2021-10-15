@@ -41,12 +41,12 @@ namespace ID.Controllers
         public async Task<IActionResult> Index(string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {
 
-           
+
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "Type";
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
-            
+
 
 
             if (searchString != null)
@@ -93,7 +93,8 @@ namespace ID.Controllers
 
             int pageSize = 3;
             return View(await PaginatedList<Package>.CreateAsync(pks.AsNoTracking(), pageNumber ?? 1, pageSize));
-            
+
+            return View(pks);
 
         }
 
@@ -116,8 +117,8 @@ namespace ID.Controllers
 
 
 
-        // GET: PackageController/Create
-        [Authorize/*(Roles = "Admin")*/]
+       // GET: PackageController/Create
+       //[Authorize/*(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();

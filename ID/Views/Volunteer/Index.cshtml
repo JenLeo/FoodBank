@@ -2,15 +2,19 @@
 @{
     ViewBag.Title = "Volunteers";
 }
-<h2>Volunteers</h2>
+<h3>Volunteers</h3>
 
 @using (Html.BeginForm())
 {
-    <p>
-        Search by Volunteer Name: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
-    </p>
+<p>
+    Search Volunteers: @Html.TextBox("SearchString")
+    <input type="submit" value="Search" /> |
+    <a asp-action="Index"> Back to Full List</a>
+</p>
 }
+<div>
+    <a asp-action="Create">Add new volunteer</a>
+</div>
 <table class="table">
     <tr>
 

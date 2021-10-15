@@ -1,4 +1,4 @@
-﻿@model ID.Models.Packages
+﻿@model ID.Models.Package
 
 @{
     ViewData["Title"] = "Package - " + Model.PackageNameId;
@@ -40,10 +40,10 @@
     </dl>
 </div>
 <p class="button">
-    @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.PackageID }, "")
+    @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.PackageId }, "")
 </p>
 
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.PackageID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model.PackageId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>

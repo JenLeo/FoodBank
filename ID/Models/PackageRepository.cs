@@ -16,21 +16,27 @@ namespace ID.Models
             _context = context;
         }
 
-        public IEnumerable<Packages> GetPackage()
+        public IEnumerable<Package> GetPackage()
         {
-            return _context.Package1.ToList();
+            return _context.Packages.ToList();
         }
-        public IEnumerable<Packages> Package
+        public IEnumerable<Package> Package
         {
             get
             {
-                return _context.Package1.ToList();
+                return _context.Packages.ToList();
             }
         }
-
-        public void InsertPackage(Packages package)
+        public void UpdatePackage(Package packages)
         {
-            _context.Package1.Add(package);
+            _context.Packages.Update(packages);
+            _context.SaveChanges();
+        }
+
+
+        public void InsertPackage(Package package)
+        {
+            _context.Packages.Add(package);
         }
 
         public void Save()
@@ -54,11 +60,11 @@ namespace ID.Models
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        public async Task<Packages> Create(Packages _package)
+        public async Task<Package> Create(Package _package)
         {
-            var data = new Packages
+            var data = new Package
             {
-                PackageID = _package.PackageID,
+                PackageId = _package.PackageId,
                 PackageNameId = _package.PackageNameId,
                 PackageDetail = _package.PackageDetail,
                 PackageType = _package.PackageType,
@@ -67,20 +73,20 @@ namespace ID.Models
                 
 
             };
-            await _context.Package1.AddAsync(data);
+            await _context.Packages.AddAsync(data);
             await _context.SaveChangesAsync();
             return data;
         }
 
-        public IQueryable<Packages> GetAll()
+        public IQueryable<Package> GetAll()
         {
-            return _context.Package1.AsQueryable();
+            return _context.Packages.AsQueryable();
         }
 
         public async Task<bool> Delete(string id)
         {
-            Task<Packages> pkTask = _context.Package1.FirstOrDefaultAsync(p => p.PackageID == id);
-            Packages pk = pkTask.Result;
+            Task<Package> pkTask = _context.Packages.FirstOrDefaultAsync(p => p.PackageId == id);
+            Package pk = pkTask.Result;
             if (pk == null)
             {
                 return false;
@@ -90,16 +96,16 @@ namespace ID.Models
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> Update(Packages _package)
+        public async Task<bool> Update(Package _package)
         {
-            Task<Packages> pkTask = _context.Package1.FirstOrDefaultAsync(p => p.PackageID == _package.PackageID);
-            Packages pk = pkTask.Result;
+            Task<Package> pkTask = _context.Packages.FirstOrDefaultAsync(p => p.PackageId == _package.PackageId);
+            Package pk = pkTask.Result;
             if (pk == null)
             {
                 return false;
             }
 
-            pk.PackageID = _package.PackageID;
+            pk.PackageId = _package.PackageId;
             pk.PackageNameId = _package.PackageNameId;
             pk.PackageDetail = _package.PackageDetail;
             pk.PackageType = _package.PackageType;

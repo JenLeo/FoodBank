@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +15,8 @@ namespace ID.Models
         //public ShoppingCartViewModel()
         //{
         //    this.CartItems = new List<Cart>();
-        //    //this.packages = new List<Packages>();
+        //    this.packages = new List<Packages>();
+        //}
 
 
         //}
@@ -28,6 +30,7 @@ namespace ID.Models
         //{
         //    return this.CartItems.Single(p => p.PackageID.Equals(id));
         //}
+        [Column(TypeName = "decimal(18, 2)")]
         public decimal CartTotal { get; set; }
 
        

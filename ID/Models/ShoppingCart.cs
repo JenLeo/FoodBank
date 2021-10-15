@@ -34,36 +34,32 @@ namespace ID.Models
         // factory method to create shoppingcart from session
         public static ShoppingCart GetCart(IServiceProvider services)
         {
-            // Use GetRequiredService where you require the service. It will throw an exception,
-            // when the service is not registered.
-            // GetService on the other side is for optional dependencies, which will just return
-            // null when there is no such service registered.
 
             ISession session = services.GetRequiredService<IHttpContextAccessor>()?
                 .HttpContext.Session;
 
             var context = services.GetService<AppDbContext>();
 
-            string cartId = session.GetString("CartId") ?? Guid.NewGuid().ToString();
+            string scartId = session.GetString("SCartId") ?? Guid.NewGuid().ToString();
 
-            session.SetString("CartId", cartId);
+            session.SetString("SCartId", scartId);
 
-            return new ShoppingCart(context) { ShoppingCartId = cartId };
+            return new ShoppingCart(context) { ShoppingCartId = scartId };
         }
 
 
-        public void AddToCart(Packages package, int count)
+        public void AddToCart(Package package, int count)
         {
             var shoppingCartItem =
                 _appDbContext.Carts.SingleOrDefault(
-                    s => s.Packages.PackageID == package.PackageID && s.CartId == ShoppingCartId);
+                    s => s.Package.PackageId == package.PackageId && s.ShoppingCartId == ShoppingCartId);
 
             if (shoppingCartItem == null)
             {
                 shoppingCartItem = new Cart
                 {
-                    CartId = ShoppingCartId,
-                    Packages = package,
+                    ShoppingCartId = ShoppingCartId,
+                    Package = package,
                     Count = 1
                 };
 
@@ -76,11 +72,11 @@ namespace ID.Models
             _appDbContext.SaveChanges();
         }
 
-        public int RemoveFromCart(Packages packages)
+        public int RemoveFromCart(Package packages)
         {
             var shoppingCartItem =
                 _appDbContext.Carts.SingleOrDefault(
-                    s => s.Packages.PackageID == packages.PackageID && s.CartId == ShoppingCartId);
+                    s => s.Package.PackageId == packages.PackageId && s.ShoppingCartId == ShoppingCartId);
 
             var localAmount = 0;
 
@@ -104,18 +100,22 @@ namespace ID.Models
 
         public List<Cart> GetShoppingCartItems()
         {
+
             return ShoppingCartItems ??
-                   (ShoppingCartItems =
-                       _appDbContext.Carts.Where(c => c.CartId == ShoppingCartId)
-                           .Include(s => s.Packages)
-                           .ToList());
+                (ShoppingCartItems = 
+             _appDbContext.Carts.Where(
+            cart => cart.ShoppingCartId == ShoppingCartId)
+                .Include(c => c.Package)
+                .ToList());
+
+
         }
 
         public void ClearCart()
         {
             var cartItems = _appDbContext
                 .Carts
-                .Where(cart => cart.CartId == ShoppingCartId);
+                .Where(cart => cart.ShoppingCartId == ShoppingCartId);
 
             _appDbContext.Carts.RemoveRange(cartItems);
 
@@ -127,8 +127,8 @@ namespace ID.Models
         public decimal GetShoppingCartTotal()
         {
             var total = _appDbContext.Carts.Where(c => c.
-            CartId == ShoppingCartId)
-                .Select(c => c.Packages.PackagePrice * c.Count).Sum();
+            ShoppingCartId == ShoppingCartId)
+                .Select(c => c.Package.PackagePrice * c.Count).Sum();
             return total;
            
 

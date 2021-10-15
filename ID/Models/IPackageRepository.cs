@@ -8,16 +8,17 @@ namespace ID.Models
 {
     public interface IPackageRepository : IDisposable
     {
-        IEnumerable<Packages> GetPackage();
+        IEnumerable<Package> GetPackage();
 
-        IEnumerable<Packages> Package { get; }
-        void InsertPackage(Packages package);
+        IEnumerable<Package> Package { get; }
+        void InsertPackage(Package package);
 
         void Save();
 
-        Task<Packages> Create(Packages _package);
-        Task<bool> Update(Packages _package);
+        Task<Package> Create(Package _package);
+        Task<bool> Update(Package _package);
+        void UpdatePackage(Package packages);
         Task<bool> Delete(string id);
-        IQueryable<Packages> GetAll();
+        IQueryable<Package> GetAll();
     }
 }

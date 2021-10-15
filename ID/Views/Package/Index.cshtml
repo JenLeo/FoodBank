@@ -1,5 +1,5 @@
 ﻿
-@model PaginatedList<ID.Models.Packages>
+@model PaginatedList<ID.Models.Package>
 
 
 @{
@@ -76,14 +76,14 @@
             <td>
                 <p class="button">
                     <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
-                       asp-route-PackageID="@packages.PackageID">Add to cart</a>
+                       asp-route-PackageID="@packages.PackageId">Add to cart</a>
                 </p>
                 @*<p class="button">
                  @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = @packages.PackageID }, "")
                 </p>*@
-                <a asp-action="Edit" asp-route-id="@packages.PackageID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@packages.PackageID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@packages.PackageID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@packages.PackageId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@packages.PackageId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@packages.PackageId">Delete</a>
             </td>
 
 

@@ -9,8 +9,8 @@ namespace ID.Models
 {
     public class PackageViewModel
     {
-        [Display(Name = "Package ID: ")] 
-        public string PackageID { get; set; }
+        [Display(Name = "Package Id: ")] 
+        public string PackageId { get; set; }
 
         [Display(Name = "Package Name: ")]
         public string PackageNameId { get; set; }
@@ -32,7 +32,7 @@ namespace ID.Models
         }
 
         [Display(Name = "Price: ")]
-        public int PackagePrice { get; set; }
+        public decimal PackagePrice { get; set; }
 
         [Display(Name = " ")]
         public IFormFile Pic { get; set; }

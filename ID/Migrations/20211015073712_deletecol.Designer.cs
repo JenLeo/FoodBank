@@ -4,91 +4,100 @@ using ID;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211015073712_deletecol")]
+    partial class deletecol
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.11")
+                .HasAnnotation("ProductVersion", "5.0.10")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ID.Models.Cart", b =>
                 {
-                    b.Property<string>("CartId")
+                    b.Property<int>("TypeId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CartId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<string>("PackageId")
+                    b.Property<string>("PackagesPackageID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ShoppingCartId")
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("TypeId");
 
-                    b.HasKey("CartId");
-
-                    b.HasIndex("PackageId");
+                    b.HasIndex("PackagesPackageID");
 
                     b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("ID.Models.Order", b =>
                 {
-                    b.Property<string>("OrderId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AddressLine1")
+                    b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("AddressLine2")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(70)
+                        .HasColumnType("nvarchar(70)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(160)
+                        .HasColumnType("nvarchar(160)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(160)
+                        .HasColumnType("nvarchar(160)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Phone")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasMaxLength(24)
+                        .HasColumnType("nvarchar(24)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasMaxLength(24)
+                        .HasColumnType("nvarchar(24)");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrderId");
 
@@ -115,9 +124,9 @@ namespace ID.Migrations
                     b.ToTable("Organisations");
                 });
 
-            modelBuilder.Entity("ID.Models.Package", b =>
+            modelBuilder.Entity("ID.Models.Packages", b =>
                 {
-                    b.Property<string>("PackageId")
+                    b.Property<string>("PackageID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -127,8 +136,8 @@ namespace ID.Migrations
                     b.Property<string>("PackageNameId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("PackagePrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("PackagePrice")
+                        .HasColumnType("int");
 
                     b.Property<string>("PackageType")
                         .HasColumnType("nvarchar(max)");
@@ -136,9 +145,9 @@ namespace ID.Migrations
                     b.Property<string>("Pic")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PackageId");
+                    b.HasKey("PackageID");
 
-                    b.ToTable("Packages");
+                    b.ToTable("Package1");
                 });
 
             modelBuilder.Entity("ID.Models.Supplier", b =>
@@ -373,11 +382,11 @@ namespace ID.Migrations
 
             modelBuilder.Entity("ID.Models.Cart", b =>
                 {
-                    b.HasOne("ID.Models.Package", "Package")
+                    b.HasOne("ID.Models.Packages", "Packages")
                         .WithMany()
-                        .HasForeignKey("PackageId");
+                        .HasForeignKey("PackagesPackageID");
 
-                    b.Navigation("Package");
+                    b.Navigation("Packages");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

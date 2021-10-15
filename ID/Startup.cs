@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Proxies;
 
 namespace ID
 {
@@ -38,13 +39,15 @@ namespace ID
                 options.Cookie.IsEssential = true;
             });
             services.AddMvc();
+            services.AddMemoryCache();
             services.AddSession();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(
+                options.UseLazyLoadingProxies()
+                .UseSqlServer(
                     Configuration.GetConnectionString("AzureConnection")));
 
             services.AddDatabaseDeveloperPageExceptionFilter();

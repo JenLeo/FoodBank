@@ -7,14 +7,15 @@ namespace ID.Models
     public class OrderDetail
     {
         [Key]
-        public int OrderDetailId { get; set; }
-        public int OrderId { get; set; }
-        public string PackageID { get; set; }
+        public string OrderDetailId { get; set; }
+        
+        public string OrderId { get; set; }
+        public string PackageId { get; set; }
         public int Quantity { get; set; }
 
         [Column(TypeName = "decimal(18,4)")]
         public decimal UnitPrice { get; set; }
-        public virtual Packages Packages { get; set; }
+        public virtual Package Packages { get; set; }
         public virtual Order Order { get; set; }
     }
 }

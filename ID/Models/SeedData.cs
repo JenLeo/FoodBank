@@ -16,15 +16,15 @@ namespace ID.Models
                     DbContextOptions<AppDbContext>>()))
             {
                 // Look for any.
-                if (context.Package1.Any())
+                if (context.Packages.Any())
                 {
                     return;   // DB has been seeded
                 }
 
-                context.Package1.AddRange(
-                    new Packages
+                context.Packages.AddRange(
+                    new Package
                     {
-                        PackageID = Guid.NewGuid().ToString(),
+                        PackageId = Guid.NewGuid().ToString(),
                         PackageNameId = "Fruit Frenzy",
                         PackageDetail = "Description",
                         PackageType = "Perishable",
@@ -33,9 +33,9 @@ namespace ID.Models
 
                     },
 
-                    new Packages
+                    new Package
                     {
-                        PackageID = Guid.NewGuid().ToString(),
+                        PackageId = Guid.NewGuid().ToString(),
                         PackageNameId = "Fruit Frenzy",
                         PackageDetail = "Description",
                         PackageType = "Perishable",
@@ -43,9 +43,9 @@ namespace ID.Models
                         Pic = ""
                     },
 
-                    new Packages
+                    new Package
                     {
-                        PackageID = Guid.NewGuid().ToString(),
+                        PackageId = Guid.NewGuid().ToString(),
                         PackageNameId = "Fruit Frenzy",
                         PackageDetail = "Description",
                         PackageType = "Perishable",
@@ -53,9 +53,9 @@ namespace ID.Models
                         Pic = ""
                     },
 
-                    new Packages
+                    new Package
                     {
-                        PackageID = Guid.NewGuid().ToString(),
+                        PackageId = Guid.NewGuid().ToString(),
                         PackageNameId = "Fruit Frenzy",
                         PackageDetail = "Description",
                         PackageType = "Perishable",

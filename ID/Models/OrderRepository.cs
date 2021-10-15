@@ -29,12 +29,12 @@ namespace ID.Models
                 var orderDetail = new OrderDetail()
                 {
                     Quantity = shoppingCartItem.Count,
-                    PackageID = shoppingCartItem.Packages.PackageID,
-                    UnitPrice = shoppingCartItem.Packages.PackagePrice,
+                    PackageId = shoppingCartItem.Package.PackageId,
+                    UnitPrice = shoppingCartItem.Package.PackagePrice,
                     OrderId = order.OrderId
                 };
 
-                orderTotal = shoppingCartItem.Count * shoppingCartItem.Packages.PackagePrice;
+                orderTotal = shoppingCartItem.Count * shoppingCartItem.Package.PackagePrice;
                 _appDbContext.OrderDetails.Add(orderDetail);
             }
 

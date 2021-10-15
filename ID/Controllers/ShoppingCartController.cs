@@ -44,20 +44,24 @@ namespace ID.Controllers
             return View(shoppingCartViewModel);
         }
 
-        public IActionResult AddToShoppingCart(string PackageID)
+        public IActionResult AddToShoppingCart(string PackageId/*, string PackageNameId, decimal PackagePrice*/)
         {
-            var selectedPackage = _packageRepository.Package.FirstOrDefault(p => p.PackageID == PackageID);
+            var selectedPackage = _packageRepository.GetPackage().FirstOrDefault(p => p.PackageId == PackageId);
+                //&&
+                //p.PackageNameId == PackageNameId && p.PackagePrice == PackagePrice);
 
             if (selectedPackage != null)
             {
                 _shoppingCart.AddToCart(selectedPackage, 1);
+                
+
             }
             return RedirectToAction("Index");
         }
 
-        public IActionResult RemoveFromShoppingCart(string PackageID)
+        public IActionResult RemoveFromShoppingCart(string PackageId)
         {
-            var selectedPackage = _packageRepository.Package.FirstOrDefault(p => p.PackageID == PackageID);
+            var selectedPackage = _packageRepository.Package.FirstOrDefault(p => p.PackageId == PackageId);
 
             if (selectedPackage!= null)
             {

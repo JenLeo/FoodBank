@@ -12,24 +12,25 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var line in Model.ShoppingCart.ShoppingCartItems)
+        @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
         {
 
-            <tr>
-                <td class="text-center">@line.Count</td>
-                <td class="text-left">@line.Packages.PackageNameId</td>
-                <td class="text-right">@line.Packages.PackagePrice</td>
-                <td class="text-right">
-                    @((line.Count * line.Packages.PackagePrice))
-                </td>
-            </tr>
+        <tr>
+            <td class="text-center">@item.Count</td>
+            
+            <td class="text-left">@item.Package.PackageNameId</td>
+            <td class="text-right">@item.Package.PackagePrice.ToString("c")</td>
+            <td class="text-right">
+                @((item.Count * item.Package.PackagePrice).ToString("c"))
+            </td>
+        </tr>
         }
     </tbody>
     <tfoot>
         <tr>
             <td colspan="3" class="text-right">Total:</td>
             <td class="text-right">
-                @Model.CartTotal.ToString()
+                @Model.CartTotal.ToString("c")
             </td>
         </tr>
     </tfoot>

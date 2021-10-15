@@ -11,20 +11,12 @@ namespace ID.Models
     public class Cart
     {
         [Key]
-        public int TypeId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string CartId { get; set; }
-
-        public string PackageID { get; set; }
         public int Count { get; set; }
+        public string ShoppingCartId { get; set; }
+        public string PackageId { get; set; }
+        public Package Package { get; set; }
 
-
-        public Packages Packages { get; set; }
-        public Cart()
-        {
-            Packages = new Packages();
-
-
-
-        }
     }
 }

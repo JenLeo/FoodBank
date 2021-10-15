@@ -60,7 +60,7 @@ namespace ID.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var pks = from p in _context.Package1
+            var pks = from p in _context.Packages
                       select p;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -92,7 +92,7 @@ namespace ID.Controllers
             }
 
             int pageSize = 3;
-            return View(await PaginatedList<Packages>.CreateAsync(pks.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Package>.CreateAsync(pks.AsNoTracking(), pageNumber ?? 1, pageSize));
             
 
         }
@@ -105,7 +105,7 @@ namespace ID.Controllers
                 return NotFound();
             }
 
-            var _pack = await _context.Package1.FirstOrDefaultAsync(m => m.PackageID == id);
+            var _pack = await _context.Packages.FirstOrDefaultAsync(m => m.PackageId == id);
             if (_pack == null)
             {
                 return NotFound();
@@ -127,18 +127,18 @@ namespace ID.Controllers
         [HttpPost]
         public IActionResult Create(PackageViewModel vm)
             {
-            ViewBag.PackageType = new SelectList(PackageViewModel.PackageTypes);
+           
             string stringFileName = UploadFile(vm);
-            var package = new Packages
+            var package = new Package
             {
-                PackageID = vm.PackageID,
+                PackageId = vm.PackageId,
                 PackageNameId = vm.PackageNameId,
                 PackageDetail = vm.PackageDetail,
                 PackageType = vm.PackageType,
                 PackagePrice = vm.PackagePrice,
                 Pic = stringFileName
             };
-            _context.Package1.Add(package);
+            _context.Packages.Add(package);
             _context.SaveChanges();
 
            return RedirectToAction("Index");
@@ -168,7 +168,7 @@ namespace ID.Controllers
                 return NotFound();
             }
 
-            var _pk = await _context.Package1.FindAsync(id);
+            var _pk = await _context.Packages.FindAsync(id);
             if (_pk == null)
             {
                 return NotFound();
@@ -180,10 +180,10 @@ namespace ID.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(String id, [Bind("PackageID,PackageNameId,PackageDetail,PackageName,PackagePrice,Pic")] Packages _pkg)
+        public async Task<IActionResult> Edit(String id, [Bind("PackageId,PackageNameId,PackageDetail,PackageType,PackagePrice,Pic")] Package _pkg)
         {
             
-            if (id != _pkg.PackageID)
+            if (id != _pkg.PackageId)
             {
                 return NotFound();
             }
@@ -198,7 +198,7 @@ namespace ID.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ItemExists(_pkg.PackageID))
+                    if (!ItemExists(_pkg.PackageId))
                     {
                         return NotFound();
                     }
@@ -222,8 +222,8 @@ namespace ID.Controllers
                 return NotFound();
             }
 
-            var _package = await _context.Package1
-                .FirstOrDefaultAsync(m => m.PackageID == id);
+            var _package = await _context.Packages
+                .FirstOrDefaultAsync(m => m.PackageId == id);
             if (_package == null)
             {
                 return NotFound();
@@ -237,15 +237,15 @@ namespace ID.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string Id)
         {
-            var _package = await _context.Package1.FindAsync(Id);
-            _context.Package1.Remove(_package);
+            var _package = await _context.Packages.FindAsync(Id);
+            _context.Packages.Remove(_package);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ItemExists(string id)
         {
-            return _context.Package1.Any(e => e.PackageID == id);
+            return _context.Packages.Any(e => e.PackageId == id);
         }
     }
 }

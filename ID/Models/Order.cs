@@ -1,5 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,62 +12,60 @@ using System.Threading.Tasks;
 
 namespace ID.Models
 {
-    [Bind(include:"OrderId")]
-    public partial class Order
-        {
-            [Key]
-            [ScaffoldColumn(false)]
-            public int OrderId { get; set; }
-        
-        [ScaffoldColumn(false)]
-        public string Username { get; set; }
 
-        [Required(ErrorMessage = "First Name is required")]
-        [DisplayName("First Name")]
-        [StringLength(160)]
+    public partial class Order
+    {
+        [BindNever]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string OrderId { get; set; }
+        public List<OrderDetail> OrderLines { get; set; }
+
+        [Required(ErrorMessage = "Please enter your first name")]
+        [Display(Name = "First name")]
+        [StringLength(50)]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage = "Last Name is required")]
-        [DisplayName("Last Name")]
-        [StringLength(160)]
+        [Required(ErrorMessage = "Please enter your last name")]
+        [Display(Name = "Last name")]
+        [StringLength(50)]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "Address is required")]
-        [StringLength(70)]
-        public string Address { get; set; }
+        [Required(ErrorMessage = "Please enter your address")]
+        [StringLength(100)]
+        [Display(Name = "Address Line 1")]
+        public string AddressLine1 { get; set; }
 
-        [Required(ErrorMessage = "City is required")]
-        [StringLength(40)]
+        [Display(Name = "Address Line 2")]
+        public string AddressLine2 { get; set; }
+
+        [Required(ErrorMessage = "Please enter your city")]
+        [StringLength(50)]
         public string City { get; set; }
 
-
-        [Required(ErrorMessage = "PostCode is required")]
-        [StringLength(24)]
-        [DisplayName("Postal Code")]
-        public string PostalCode { get; set; }
-
-        [Required(ErrorMessage = "Country is required")]
-        [StringLength(40)]
+        [Required(ErrorMessage = "Please enter your country")]
+        [StringLength(50)]
         public string Country { get; set; }
 
-        [Required(ErrorMessage = "Phone is required")]
-        [StringLength(24)]
-        public string Phone { get; set; }
+        [Required(ErrorMessage = "Please enter your phone number")]
+        [StringLength(25)]
+        [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Phone number")]
+        public string PhoneNumber { get; set; }
 
-        [Required(ErrorMessage = "Email Address is required")]
-        [DisplayName("Email Address")]
-
-        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}",
-     ErrorMessage = "Email is is not valid.")]
+        [Required]
+        [StringLength(50)]
         [DataType(DataType.EmailAddress)]
+        [RegularExpression(@"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|""(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*"")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])",
+            ErrorMessage = "The email address is not entered in a correct format")]
         public string Email { get; set; }
 
-        [Column(TypeName = "decimal(18,4)")]
+        [BindNever]
         [ScaffoldColumn(false)]
         public decimal Total { get; set; }
 
+        [BindNever]
         [ScaffoldColumn(false)]
-        public System.DateTime OrderDate { get; set; }
-            public List<OrderDetail> OrderDetails { get; set; }
-        }
+        public DateTime OrderDate { get; set; }
     }
+}

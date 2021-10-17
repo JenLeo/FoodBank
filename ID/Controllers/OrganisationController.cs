@@ -65,7 +65,7 @@ namespace ID.Controllers
                 return NotFound();
             }
 
-            var _org = await _context.Organisations.FirstOrDefaultAsync(m => m.OrganisationID == id);
+            var _org = await _context.Organisations.FirstOrDefaultAsync(m => m.OrganisationId == id);
             if (_org == null)
             {
                 return NotFound();
@@ -86,7 +86,7 @@ namespace ID.Controllers
             string stringFileName = UploadFile(vm);
             var org = new Organisation
             {
-                OrganisationID = vm.OrganisationID,
+                OrganisationId = vm.OrganisationId,
                 OrganisationName = vm.OrganisationName,
                 OrganisationAddress = vm.OrganisationAddress,
                 Pic = stringFileName
@@ -134,9 +134,9 @@ namespace ID.Controllers
         // POST: FoodServiceController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("OrganisationID,OrganisationName,OrganisationAddress,Pic")] Organisation _or)
+        public async Task<IActionResult> Edit(string id, [Bind("OrganisationId,OrganisationName,OrganisationAddress,Pic")] Organisation _or)
         {
-            if (id != _or.OrganisationID)
+            if (id != _or.OrganisationId)
             {
                 return NotFound();
             }
@@ -150,7 +150,7 @@ namespace ID.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ItemExists(_or.OrganisationID))
+                    if (!ItemExists(_or.OrganisationId))
                     {
                         return NotFound();
                     }
@@ -177,7 +177,7 @@ namespace ID.Controllers
         {
 
             var _org = await _context.Organisations
-                .FirstOrDefaultAsync(m => m.OrganisationID == id);
+                .FirstOrDefaultAsync(m => m.OrganisationId == id);
            
             return View(_org);
         }

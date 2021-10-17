@@ -4,14 +4,16 @@ using ID;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211016093537_order")]
+    partial class order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,19 +175,19 @@ namespace ID.Migrations
                     b.Property<string>("Pic")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SupplierId")
+                    b.Property<string>("SupplierID")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("PackageId");
 
-                    b.HasIndex("SupplierId");
+                    b.HasIndex("SupplierID");
 
                     b.ToTable("Packages");
                 });
 
             modelBuilder.Entity("ID.Models.Supplier", b =>
                 {
-                    b.Property<string>("SupplierId")
+                    b.Property<string>("SupplierID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -198,7 +200,7 @@ namespace ID.Migrations
                     b.Property<string>("SupplierName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SupplierId");
+                    b.HasKey("SupplierID");
 
                     b.ToTable("Suppliers");
                 });
@@ -453,7 +455,7 @@ namespace ID.Migrations
                 {
                     b.HasOne("ID.Models.Supplier", "Supplier")
                         .WithMany()
-                        .HasForeignKey("SupplierId");
+                        .HasForeignKey("SupplierID");
 
                     b.Navigation("Supplier");
                 });

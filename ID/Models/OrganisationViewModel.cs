@@ -8,7 +8,7 @@ namespace ID.Models
 {
     public class OrganisationViewModel
     {
-        public string OrganisationID { get; set; }
+        public string OrganisationId { get; set; }
         public string OrganisationName { get; set; }
         public string OrganisationAddress { get; set; }
         public IFormFile Pic { get; set; }

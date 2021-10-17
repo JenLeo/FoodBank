@@ -60,6 +60,11 @@ namespace ID.Models
             ErrorMessage = "The email address is not entered in a correct format")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Please select an organisation to gift")]
+        [StringLength(100)]
+        ////dropdownlist
+        public string OrganisationChoice { get; set; }
+
         [BindNever]
         [ScaffoldColumn(false)]
         public decimal Total { get; set; }
@@ -67,5 +72,9 @@ namespace ID.Models
         [BindNever]
         [ScaffoldColumn(false)]
         public DateTime OrderDate { get; set; }
+
+        public string OrganisationId { get; set; }
+        public virtual Organisation Organisation { get; set; }
+        //public virtual List<Organisation> organisations { get; set; }
     }
 }

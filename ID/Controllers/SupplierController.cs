@@ -64,7 +64,7 @@ namespace ID.Controllers
                 return NotFound();
             }
 
-            var _sp = await _context.Suppliers.FirstOrDefaultAsync(m => m.SupplierID == id);
+            var _sp = await _context.Suppliers.FirstOrDefaultAsync(m => m.SupplierId == id);
             if (_sp == null)
             {
                 return NotFound();
@@ -85,7 +85,7 @@ namespace ID.Controllers
             string stringFileName = UploadFile(vm);
             var sp = new Supplier
             {
-                SupplierID = vm.SupplierID,
+                SupplierId = vm.SupplierId,
                 SupplierName = vm.SupplierName,
                 SupplierAddress = vm.SupplierAddress,
                 Pic = stringFileName
@@ -133,9 +133,9 @@ namespace ID.Controllers
         // POST: SupplierController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("SupplierID,SupplierName,SupplierAddress,Pic")] Supplier _sp)
+        public async Task<IActionResult> Edit(string id, [Bind("SupplierId,SupplierName,SupplierAddress,Pic")] Supplier _sp)
         {
-            if (id != _sp.SupplierID)
+            if (id != _sp.SupplierId)
             {
                 return NotFound();
             }
@@ -149,7 +149,7 @@ namespace ID.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ItemExists(_sp.SupplierID))
+                    if (!ItemExists(_sp.SupplierId))
                     {
                         return NotFound();
                     }
@@ -163,7 +163,7 @@ namespace ID.Controllers
             return View(_sp);
         }
 
-        private bool ItemExists(string supplierID)
+        private bool ItemExists(string supplierId)
         {
             throw new NotImplementedException();
         }
@@ -175,7 +175,7 @@ namespace ID.Controllers
         {
            
             var _sp = await _context.Suppliers
-                .FirstOrDefaultAsync(m => m.SupplierID == id);
+                .FirstOrDefaultAsync(m => m.SupplierId == id);
           
 
             return View(_sp);

@@ -67,12 +67,20 @@
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
-
     <div class="form-group">
-        <div class="col-md-offset-2 col-md-5">
-            <input type="submit" class="btn btn-primary" value="Complete order" />
+        <label asp-for="OrganisationChoice" class="col-md-2 control-label"></label>
+        @*@Html.DropDownListFor(),
+        "Select Organisation")*@
+        <div class="col-md-5">
+            <input asp-for="OrganisationChoice" class="form-control" />
+            <span asp-validation-for="OrganisationChoice" class="text-danger"></span>
         </div>
-    </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-5">
+                <input type="submit" class="btn btn-primary" value="Complete order" />
+            </div>
+        </div>
 
 
 </form>

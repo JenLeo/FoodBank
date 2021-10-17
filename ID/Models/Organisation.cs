@@ -14,7 +14,7 @@ namespace ID.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Organisation ID: ")]
-        public string OrganisationID { get; set; }
+        public string OrganisationId { get; set; }
 
         [Display(Name = "Name: ")]
         public string OrganisationName { get; set; }

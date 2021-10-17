@@ -14,14 +14,15 @@ namespace ID.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Partner's ID: ")]
-        public string SupplierID { get; set; }
+        public string SupplierId{ get; set; }
 
         [Display(Name = "Name: ")]
-        public String SupplierName { get; set; }
+        public string SupplierName { get; set; }
 
         [Display(Name = "Location: ")]
-        public String SupplierAddress { get; set; }
+        public string SupplierAddress { get; set; }
 
         public string Pic { get; set; }
+        //public virtual Package Package { get; set; }
     }
 }

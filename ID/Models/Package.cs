@@ -36,8 +36,12 @@ namespace ID.Models
     
         public string Pic { get; set; }
 
-   
-    
+        [Display(Name = "Supplier ")]
+        public string SupplierId { get; set; }
+
+
+
+        public virtual Supplier Supplier { get; set; }
     }
     public enum PackageTypes
     {

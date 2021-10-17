@@ -39,6 +39,9 @@
             </a>*@
             <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
         </th>
+        <th>
+            Supplier
+        </th>
 
     </tr>
     @foreach (var packages in Model)
@@ -60,6 +63,9 @@
             <td>
                 @Html.DisplayFor(modelItem => packages.PackagePrice)
 
+            </td>
+            <td>
+            @*@packages.Supplier.SupplierName*@
             </td>
             <td>
                 <img src="~/images/@packages.Pic" class="rounded-circle" width="80" height="80" asp-append-version="true" />

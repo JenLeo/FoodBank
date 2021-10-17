@@ -1,6 +1,7 @@
 ﻿using ID.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,5 +48,85 @@ namespace ID.Controllers
         //    }
         //    return View(await or.ToListAsync());
         //}
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var _or = await _context.Organisations.FindAsync(id);
+            if (_or == null)
+            {
+                return NotFound();
+            }
+            return View(_or);
+        }
+
+
+
+        // POST: OrderController/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,AddressLine1,AddressLine2,City,Country,PhoneNumber,Email,OrganisationChoice")] Order _or)
+        {
+            if (id != _or.OrderId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(_or);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ItemExists(_or.OrganisationId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(_or
+                );
+        }
+
+        private bool ItemExists(string orderId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        // GET: OrderController/Delete/5
+
+        public async Task<IActionResult> Delete(string id)
+        {
+
+            var _ord = await _context.Orders
+                .FirstOrDefaultAsync(m => m.OrderId == id);
+
+            return View(_ord);
+        }
+
+        // POST: OrderController/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string Id)
+        {
+            var _ord = await _context.Orders.FindAsync(Id);
+            _context.Orders.Remove(_ord);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

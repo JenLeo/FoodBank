@@ -40,7 +40,9 @@
     </dl>
 </div>
 <p class="button">
-    @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.PackageId }, "")
+
+    <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
+       asp-route-PackageID="@Model.PackageId">Add to cart</a>
 </p>
 
 <div>

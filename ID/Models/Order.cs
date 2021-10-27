@@ -32,7 +32,7 @@ namespace ID.Models
 
         [Required(ErrorMessage = "Please enter your address")]
         [StringLength(100)]
-        [Display(Name = "Address Line 1")]
+        [Display(Name = "Address ")]
         public string AddressLine1 { get; set; }
 
         [Display(Name = "Address Line 2")]
@@ -68,7 +68,7 @@ namespace ID.Models
         [ScaffoldColumn(false)]
         public decimal Total { get; set; }
 
-        [BindNever]
+        [Display(Name = "Order Date ")]
         [ScaffoldColumn(false)]
         public DateTime OrderDate { get; set; }
 

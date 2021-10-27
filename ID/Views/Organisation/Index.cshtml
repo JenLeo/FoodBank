@@ -2,16 +2,17 @@
 @{
     ViewBag.Title = "Organisations";
 }
-<h3>Our Local Food Service Organisations</h3>
+<h3>Local Food Service Organisations</h3>
 
 @using (Html.BeginForm())
 {
-    <p>
-        Search Organisations: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
-        Search by Location: @Html.TextBox("SearchLocation")
-        <input type="submit" value="Search" />
-    </p>
+<p>
+    Search Organisations: @Html.TextBox("SearchString")
+    <input type="submit" value="Search" />
+    Search by Location: @Html.TextBox("SearchLocation")
+    <input type="submit" value="Search" />
+    <a asp-action="Index"> Back to Full List</a>
+</p>
 }
 <div>
     <a asp-action="Create">Add new organisation</a>

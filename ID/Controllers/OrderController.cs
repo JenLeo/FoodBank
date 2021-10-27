@@ -33,21 +33,49 @@ namespace ID.Controllers
             return View(items);
         }
 
-        //public async Task<IActionResult> Index(string searchString, string searchLocation)
-        //{
-        //    var or = from o in _context.Orders
-        //             select o;
+        public async Task<IActionResult> Index(string searchString, string searchLocation)
+        {
+            var or = from o in _context.Orders
+                     select o;
 
-        //    if (!String.IsNullOrEmpty(searchString))
-        //    {
-        //        or = or.Where(o => o.SupplierName.Contains(searchString));
-        //    }
-        //    if (!String.IsNullOrEmpty(searchLocation))
-        //    {
-        //        or = or.Where(o => o.SupplierAddress.Contains(searchLocation));
-        //    }
-        //    return View(await or.ToListAsync());
-        //}
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                or = or.Where(o => o.FirstName.Contains(searchString) ||
+                o.LastName.Contains(searchString) ||
+                o.PhoneNumber.Contains(searchString) ||
+                o.Email.Contains(searchString) ||
+                o.OrderDate.ToString().Contains(searchString) ||
+                o.OrderStatus.Contains(searchString)
+
+                );
+            }
+            if (!String.IsNullOrEmpty(searchLocation))
+            {
+                or = or.Where(o => o.AddressLine1.Contains(searchLocation) ||
+                o.AddressLine2.Contains(searchLocation) ||
+                o.City.Contains(searchLocation) ||
+                o.Country.Contains(searchLocation));
+            }
+            return View(await or.ToListAsync());
+
+        }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var _ord = await _context.Orders.FirstOrDefaultAsync(m => m.OrderId == id);
+            if (_ord == null)
+            {
+                return NotFound();
+            }
+
+            return View(_ord);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -69,8 +97,10 @@ namespace ID.Controllers
         // POST: OrderController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //OrderId,FirstName,LastName,AddressLine1," +
+           // "City,Country,PhoneNumber,Email,OrderDate,
         public async Task<IActionResult> Edit(string id, [Bind("OrderId,FirstName,LastName,AddressLine1," +
-            "AddressLine2,City,Country,PhoneNumber,Email,OrganisationChoice,OrderDate,OrderStatus")] Order _or)
+            "City,Country,PhoneNumber,Email,OrderDate,OrderStatus")] Order _or)
         {
             if (id != _or.OrderId)
             {

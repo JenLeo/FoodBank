@@ -6,17 +6,20 @@
 
 @using (Html.BeginForm())
 {
-    <p>
-        Search Orders: @Html.TextBox("SearchString")
-        <input type="submit" value="Search" />
-    </p>
+<p>
+    Search Orders: @Html.TextBox("SearchString")
+    <input type="submit" value="Search" />
+    Search by Location: @Html.TextBox("SearchLocation")
+    <input type="submit" value="Search" />
+    <a asp-action="Index"> Back to Full List</a>
+</p>
 }
 <table class="table">
     <tr>
 
-        <th>
+        @*<th>
             @Html.DisplayNameFor(model => model.OrderId)
-        </th>
+        </th>*@
         <th>
             @Html.DisplayNameFor(model => model.FirstName)
         </th>
@@ -43,9 +46,9 @@
     @foreach (var ord in Model)
     {
 <tr>
-    <td>
+    @*<td>
         @Html.DisplayFor(modelItem => ord.OrderId)
-    </td>
+    </td>*@
     <td>
         @Html.DisplayFor(modelItem => ord.FirstName)
     </td>

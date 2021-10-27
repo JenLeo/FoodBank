@@ -16,10 +16,10 @@ namespace ID.Models
         [Display(Name = "Volunteer ID: ")]
         public string VolunteerId { get; set; }
 
-        [Display(Name = "Volunteer Last Name: ")]
+        [Display(Name = "Last Name: ")]
         public string VolLName { get; set; }
 
-        [Display(Name = "Volunteer First Name: ")]
+        [Display(Name = "First Name: ")]
         public string VolFName { get; set; }
        
     }

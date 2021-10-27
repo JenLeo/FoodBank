@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Proxies;
 
+
 namespace ID
 {
     public class Startup
@@ -32,15 +33,14 @@ namespace ID
         {
             services.AddDistributedMemoryCache();
 
-            //services.AddSession(options =>
-            //{
-            //    options.IdleTimeout = TimeSpan.FromSeconds(10);
-            //    options.Cookie.HttpOnly = true;
-            //    options.Cookie.IsEssential = true;
-            //});
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(60);
+                //options.Cookie.HttpOnly = true;
+                //options.Cookie.IsEssential = true;
+            });
             services.AddMvc();
-            services.AddMemoryCache();
-            services.AddSession();
+          
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -58,9 +58,13 @@ namespace ID
             services.AddControllersWithViews();
             
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
+            services.AddScoped(sp => ShoppingCart.GetCart(sp));
             services.AddScoped<IPackageRepository, PackageRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ISupplierRepository, SupplierRepository>();
+
+            //services.AddMemoryCache();
+            //services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,7 +82,7 @@ namespace ID
                 app.UseHsts();
             }
 
-            app.UseSession();
+           
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -86,6 +90,8 @@ namespace ID
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {

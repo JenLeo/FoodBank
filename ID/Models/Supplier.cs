@@ -23,6 +23,7 @@ namespace ID.Models
         public string SupplierAddress { get; set; }
 
         public string Pic { get; set; }
-        //public virtual Package Package { get; set; }
+
+        public List<Package> Packages { get; set; }
     }
 }

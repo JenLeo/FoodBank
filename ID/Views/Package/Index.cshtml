@@ -18,19 +18,13 @@
     <tr>
 
         <th>
-            @*<a asp-page="./Index" asp-route-sortOrder="@Model.NameSort">
-                @Html.DisplayNameFor(model => model.Packages[0].PackageNameId)
-            </a>*@
+            
             <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Package</a>
         </th>
-        @*<th> @Html.DisplayNameFor(model => model.Packages[0].PackageDetail)</th>*@
         <th>
                 Description
             </th>
         <th>
-            @*<a asp-page="./Index" asp-route-sortOrder="@Model.TypeSort">
-                @Html.DisplayNameFor(model => model.Packages[0].PackageType)
-            </a>*@
             <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Type</a>
         </th>
         <th>
@@ -39,9 +33,9 @@
             </a>*@
             <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
         </th>
-        <th>
+        @*<th>
             Supplier
-        </th>
+        </th>*@
 
     </tr>
     @foreach (var packages in Model)

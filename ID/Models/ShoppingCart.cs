@@ -1,4 +1,5 @@
 ﻿using ID.Controllers;
+using ID.Helpers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,16 +36,15 @@ namespace ID.Models
         public static ShoppingCart GetCart(IServiceProvider services)
         {
 
-            ISession session = services.GetRequiredService<IHttpContextAccessor>()?
-                .HttpContext.Session;
+            ISession session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext.Session;
 
             var context = services.GetService<AppDbContext>();
 
-            string cartId = session.GetString("CartId") ?? Guid.NewGuid().ToString();
+            string scartId = session.GetString("ShoppingCartId") ?? Guid.NewGuid().ToString();
 
-            session.SetString("CartId", cartId);
+            session.SetString("ShoppingCartId", scartId);
 
-            return new ShoppingCart(context) { ShoppingCartId = cartId };
+            return new ShoppingCart(context) { ShoppingCartId = scartId };
         }
 
 
@@ -99,7 +100,7 @@ namespace ID.Models
 
         public List<Cart> GetShoppingCartItems()
         {
-
+            
             return ShoppingCartItems ??
                 (ShoppingCartItems = 
              _appDbContext.Carts.Where(

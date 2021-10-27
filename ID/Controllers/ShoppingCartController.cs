@@ -14,7 +14,9 @@ using System.Net;
 using System.Threading.Tasks;
 using System.IO;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using ID.Helpers;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 
 namespace ID.Controllers
 {
@@ -32,8 +34,10 @@ namespace ID.Controllers
 
         public IActionResult Index()
         {
+
+
             var items = _shoppingCart.GetShoppingCartItems();
-            _shoppingCart.ShoppingCartItems = items;
+
 
             var shoppingCartViewModel = new ShoppingCartViewModel
             {
@@ -41,14 +45,14 @@ namespace ID.Controllers
                 CartTotal = _shoppingCart.GetShoppingCartTotal()
             };
 
+            var cart = JsonConvert.DeserializeObject<ShoppingCartViewModel>(HttpContext.Session.GetString("cart"));
             return View(shoppingCartViewModel);
         }
 
-        public IActionResult AddToShoppingCart(string PackageId/*, string PackageNameId, decimal PackagePrice*/)
+        public IActionResult AddToShoppingCart(string PackageId)
         {
             var selectedPackage = _packageRepository.GetPackage().FirstOrDefault(p => p.PackageId == PackageId);
-            //&&
-            //p.PackageNameId == PackageNameId && p.PackagePrice == PackagePrice);
+            
 
             if (selectedPackage != null)
             {
@@ -56,6 +60,8 @@ namespace ID.Controllers
 
 
             }
+
+            
             return RedirectToAction("Index");
         }
 

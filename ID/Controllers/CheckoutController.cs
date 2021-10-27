@@ -58,7 +58,7 @@ public IActionResult CheckoutComplete()
     }
     else
     {
-        ViewBag.CheckoutCompleteMessage = ", thanks for your order!";
+        ViewBag.CheckoutCompleteMessage = "Thanks for your order!";
     }
 
 

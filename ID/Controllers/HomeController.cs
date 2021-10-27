@@ -1,6 +1,8 @@
 ﻿using ID.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,6 +22,10 @@ namespace ID.Controllers
 
         public IActionResult Index()
         {
+            var cart = new ShoppingCartViewModel();
+            //set value into session key
+
+            HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
             return View();
         }
 

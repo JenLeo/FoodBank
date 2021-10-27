@@ -16,6 +16,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace ID.Controllers
 {
@@ -94,6 +95,9 @@ namespace ID.Controllers
             int pageSize = 3;
             return View(await PaginatedList<Package>.CreateAsync(pks.AsNoTracking(), pageNumber ?? 1, pageSize));
 
+
+            ////set value into session key
+            //HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(pks));
             return View(pks);
 
         }

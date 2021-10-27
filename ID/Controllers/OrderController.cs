@@ -56,7 +56,7 @@ namespace ID.Controllers
                 return NotFound();
             }
 
-            var _or = await _context.Organisations.FindAsync(id);
+            var _or = await _context.Orders.FindAsync(id);
             if (_or == null)
             {
                 return NotFound();
@@ -69,7 +69,8 @@ namespace ID.Controllers
         // POST: OrderController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("FirstName,LastName,AddressLine1,AddressLine2,City,Country,PhoneNumber,Email,OrganisationChoice")] Order _or)
+        public async Task<IActionResult> Edit(string id, [Bind("OrderId,FirstName,LastName,AddressLine1," +
+            "AddressLine2,City,Country,PhoneNumber,Email,OrganisationChoice,OrderDate,OrderStatus")] Order _or)
         {
             if (id != _or.OrderId)
             {
@@ -85,7 +86,7 @@ namespace ID.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ItemExists(_or.OrganisationId))
+                    if (!ItemExists(_or.OrderId))
                     {
                         return NotFound();
                     }

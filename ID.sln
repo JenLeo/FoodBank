@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ID", "ID\ID.csproj", "{6754B98B-D94E-4321-8A35-0B0A345E9095}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ID", "ID\ID.csproj", "{6754B98B-D94E-4321-8A35-0B0A345E9095}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IDTest", "IDTest\IDTest.csproj", "{DC71A3C2-4198-4BC8-8C78-651063B6A3B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{6754B98B-D94E-4321-8A35-0B0A345E9095}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6754B98B-D94E-4321-8A35-0B0A345E9095}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6754B98B-D94E-4321-8A35-0B0A345E9095}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC71A3C2-4198-4BC8-8C78-651063B6A3B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC71A3C2-4198-4BC8-8C78-651063B6A3B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC71A3C2-4198-4BC8-8C78-651063B6A3B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC71A3C2-4198-4BC8-8C78-651063B6A3B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

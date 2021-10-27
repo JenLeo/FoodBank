@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,6 +34,13 @@ namespace ID.Models
 
         [Display(Name = "Price: ")]
         public decimal PackagePrice { get; set; }
+        
+        [Display(Name = "Supplier ")]
+        public string SupplierId { get; set; }
+
+        public List<SelectListItem> Suppliers { get; set; }
+
+        public virtual Supplier Supplier { get; set; }
 
         [Display(Name = " ")]
         public IFormFile Pic { get; set; }

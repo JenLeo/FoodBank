@@ -12,6 +12,7 @@
       "type": "mssql.azure",
       "connectionId": "AzureConnection",
       "secretStore": "LocalSecretsFile"
-    }
+    },
+    "Microsoft.AspNetCore.Session": "2.2.0"
   }
 }

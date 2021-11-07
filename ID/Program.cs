@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,8 +19,9 @@ namespace ID
 
     {
         public static void Main(string[] args)
-        {
-            var host = CreateHostBuilder(args).Build();
+        { 
+
+        var host = CreateHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())
             {

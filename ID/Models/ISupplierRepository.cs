@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ID.Models
 {
-    interface ISupplierRepository
+   public interface ISupplierRepository
     {
         IEnumerable<Supplier> Suppliers { get; }
     }

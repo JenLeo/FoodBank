@@ -24,21 +24,32 @@ namespace ID.Controllers
     public class PackageController : Controller
     {
         private readonly IPackageRepository _PackageRepository;
+        private readonly ISupplierRepository _supplierRepository;
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment webHostEnv;
 
       
         public PackageController(
             IPackageRepository packageRepository,
-            AppDbContext Context,
+            ISupplierRepository supplierRepository,
+        AppDbContext Context,
             Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnv
          )
         {
             _PackageRepository = packageRepository;
+            _supplierRepository = supplierRepository;
             _context = Context;
             this.webHostEnv = webHostEnv;
         }
 
+        //public IActionResult Index()
+        //{
+        //    var PackageViewModel = new PackageViewModel
+        //    {
+            
+        //    };
+        //    return View(PackageViewModel);
+        //}
         public async Task<IActionResult> Index(string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {
 
@@ -96,9 +107,7 @@ namespace ID.Controllers
             return View(await PaginatedList<Package>.CreateAsync(pks.AsNoTracking(), pageNumber ?? 1, pageSize));
 
 
-            ////set value into session key
-            //HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(pks));
-            return View(pks);
+            //return View(pks);
 
         }
 
@@ -130,7 +139,7 @@ namespace ID.Controllers
 
         // POST: PackageController/Create
         [HttpPost]
-        public IActionResult Create(PackageViewModel vm)
+        public IActionResult Create(PackageViewModel vm, SupplierViewModel svm)
             {
            
             string stringFileName = UploadFile(vm);
@@ -141,6 +150,7 @@ namespace ID.Controllers
                 PackageDetail = vm.PackageDetail,
                 PackageType = vm.PackageType,
                 PackagePrice = vm.PackagePrice,
+                SupplierId = svm.SupplierId,
                 Pic = stringFileName
             };
             _context.Packages.Add(package);
@@ -185,7 +195,7 @@ namespace ID.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(String id, [Bind("PackageId,PackageNameId,PackageDetail,PackageType,PackagePrice,Pic")] Package _pkg)
+        public async Task<IActionResult> Edit(String id, [Bind("PackageId,PackageNameId,PackageDetail,PackageType,PackagePrice,SupplierId,Pic")] Package _pkg, Supplier sp)
         {
             
             if (id != _pkg.PackageId)

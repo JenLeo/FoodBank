@@ -36,12 +36,13 @@ namespace ID.Models
     
         public string Pic { get; set; }
 
+        [ForeignKey("Supplier")]
         [Display(Name = "Supplier ")]
         public string SupplierId { get; set; }
 
+        //public string SupplierName { get; set; }
 
-
-        public virtual Supplier Supplier { get; set; }
+        public Supplier Supplier { get; set; }
     }
     public enum PackageTypes
     {

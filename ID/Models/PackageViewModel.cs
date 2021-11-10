@@ -35,10 +35,11 @@ namespace ID.Models
         [Display(Name = "Price: ")]
         public decimal PackagePrice { get; set; }
         
-        [Display(Name = "Supplier ")]
-        public string SupplierId { get; set; }
+        //[Display(Name = "Supplier ")]
+        //public string SupplierId { get; set; }
 
-        public List<SelectListItem> Suppliers { get; set; }
+        //public List<SelectListItem> Suppliers { get; set; }
+        public List<Supplier> Suppliers { get; set; }
 
         public virtual Supplier Supplier { get; set; }
 

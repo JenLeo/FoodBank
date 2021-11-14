@@ -58,11 +58,11 @@
         @Html.DisplayFor(modelItem => packages.PackagePrice)
 
     </td>
-    @*<td>
-        @Html.DisplayFor(modelItem => packages.Supplier.SupplierName)*@
-    <td class="text-left">@packages.Supplier.SupplierName</td>
+   <td>
+    @Html.DisplayFor(modelItem => packages.Supplier.SupplierId)
+    @*<td class="text-left">@packages.Supplier.SupplierId</td>*@
     @*@packages.Supplier.SupplierName*@
-    @*</td>*@
+    </td>
     <td>
         <img src="~/images/@packages.Pic" class="rounded-circle" width="80" height="80" asp-append-version="true" />
     </td>

@@ -18,7 +18,8 @@ namespace ID.Models
 
         public IEnumerable<Package> GetPackage()
         {
-            return _context.Packages.ToList();
+            return _context.Packages
+                .ToList();
         }
         public IEnumerable<Package> Package
         {
@@ -29,14 +30,16 @@ namespace ID.Models
         }
         public void UpdatePackage(Package packages)
         {
-            _context.Packages.Update(packages);
+            _context.Packages
+                .Update(packages);
             _context.SaveChanges();
         }
 
 
         public void InsertPackage(Package package)
         {
-            _context.Packages.Add(package);
+            _context.Packages
+                .Add(package);
         }
 
         public void Save()
@@ -69,23 +72,28 @@ namespace ID.Models
                 PackageDetail = _package.PackageDetail,
                 PackageType = _package.PackageType,
                 PackagePrice = _package.PackagePrice,
+                SupplierId = _package.Supplier.SupplierId,
+
                 Pic = _package.Pic
                 
 
             };
-            await _context.Packages.AddAsync(data);
+            await _context.Packages
+                .AddAsync(data);
             await _context.SaveChangesAsync();
             return data;
         }
 
         public IQueryable<Package> GetAll()
         {
-            return _context.Packages.AsQueryable();
+            return _context.Packages.
+                AsQueryable();
         }
 
         public async Task<bool> Delete(string id)
         {
-            Task<Package> pkTask = _context.Packages.FirstOrDefaultAsync(p => p.PackageId == id);
+            Task<Package> pkTask = _context.Packages
+                .FirstOrDefaultAsync(p => p.PackageId == id);
             Package pk = pkTask.Result;
             if (pk == null)
             {
@@ -98,7 +106,8 @@ namespace ID.Models
         }
         public async Task<bool> Update(Package _package)
         {
-            Task<Package> pkTask = _context.Packages.FirstOrDefaultAsync(p => p.PackageId == _package.PackageId);
+            Task<Package> pkTask = _context.Packages
+                .FirstOrDefaultAsync(p => p.PackageId == _package.PackageId);
             Package pk = pkTask.Result;
             if (pk == null)
             {
@@ -111,7 +120,7 @@ namespace ID.Models
             pk.PackageType = _package.PackageType;
             pk.PackagePrice = _package.PackagePrice;
             pk.Pic = _package.Pic;
-            
+            pk.SupplierId = _package.Supplier.SupplierId;
 
 
             await _context.SaveChangesAsync();

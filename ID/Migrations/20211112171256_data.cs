@@ -2,7 +2,7 @@
 
 namespace ID.Migrations
 {
-    public partial class pak2 : Migration
+    public partial class data : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

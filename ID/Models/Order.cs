@@ -69,10 +69,12 @@ namespace ID.Models
         public decimal Total { get; set; }
 
         [Display(Name = "Order Date ")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         [ScaffoldColumn(false)]
         public DateTime OrderDate { get; set; }
 
         [Display(Name = "Status")]
+        [DisplayFormat(NullDisplayText = "Pending")]
         public string OrderStatus { get; set; }
         public string OrganisationId { get; set; }
         public virtual Organisation Organisation { get; set; }

@@ -2,7 +2,7 @@
 
 namespace ID.Migrations
 {
-    public partial class stop : Migration
+    public partial class fix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

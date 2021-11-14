@@ -186,10 +186,28 @@ namespace ID.Migrations
                     b.ToTable("Packages");
                 });
 
+            modelBuilder.Entity("ID.Models.PackageNav", b =>
+                {
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("PackageId", "SupplierId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("PackageNavs");
+                });
+
             modelBuilder.Entity("ID.Models.Supplier", b =>
                 {
                     b.Property<string>("SupplierId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PackageId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Pic")
@@ -202,6 +220,8 @@ namespace ID.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SupplierId");
+
+                    b.HasIndex("PackageId");
 
                     b.ToTable("Suppliers");
                 });
@@ -455,10 +475,36 @@ namespace ID.Migrations
             modelBuilder.Entity("ID.Models.Package", b =>
                 {
                     b.HasOne("ID.Models.Supplier", "Supplier")
-                        .WithMany("Packages")
+                        .WithMany()
                         .HasForeignKey("SupplierId");
 
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("ID.Models.PackageNav", b =>
+                {
+                    b.HasOne("ID.Models.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ID.Models.Supplier", "Supplier")
+                        .WithMany("Packagenav")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Package");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("ID.Models.Supplier", b =>
+                {
+                    b.HasOne("ID.Models.Package", null)
+                        .WithMany("Suppliers")
+                        .HasForeignKey("PackageId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -517,9 +563,14 @@ namespace ID.Migrations
                     b.Navigation("OrderLines");
                 });
 
+            modelBuilder.Entity("ID.Models.Package", b =>
+                {
+                    b.Navigation("Suppliers");
+                });
+
             modelBuilder.Entity("ID.Models.Supplier", b =>
                 {
-                    b.Navigation("Packages");
+                    b.Navigation("Packagenav");
                 });
 #pragma warning restore 612, 618
         }

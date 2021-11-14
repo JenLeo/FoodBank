@@ -11,6 +11,12 @@ namespace ID.Models
     
     public class Supplier
     {
+        //public Supplier()
+        //{
+        //    this.Packages = new HashSet<Package>();
+        //}
+
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Display(Name = "Partner's ID: ")]
@@ -24,6 +30,12 @@ namespace ID.Models
 
         public string Pic { get; set; }
 
-        public List<Package> Packages { get; set; }
+        public virtual ICollection<PackageNav> Packagenav {get; set; }
+
+
+        //[ForeignKey("SupplierId")]
+        //public ICollection<Package> Packages { get; set; }
+
+        //public List<Package> Packages { get; set; }
     }
 }

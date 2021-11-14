@@ -2,7 +2,7 @@
 
 namespace ID.Migrations
 {
-    public partial class colchanges : Migration
+    public partial class cartfk : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

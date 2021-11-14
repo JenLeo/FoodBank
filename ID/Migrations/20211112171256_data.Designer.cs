@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211015125717_colfix")]
-    partial class colfix
+    [Migration("20211112171256_data")]
+    partial class data
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,12 +24,13 @@ namespace ID.Migrations
             modelBuilder.Entity("ID.Models.Cart", b =>
                 {
                     b.Property<string>("CartId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<string>("PackagesPackageID")
+                    b.Property<string>("PackageId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ShoppingCartId")
@@ -37,74 +38,108 @@ namespace ID.Migrations
 
                     b.HasKey("CartId");
 
-                    b.HasIndex("PackagesPackageID");
+                    b.HasIndex("PackageId");
 
                     b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("ID.Models.Order", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<string>("OrderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("AddressLine1")
                         .IsRequired()
-                        .HasMaxLength(70)
-                        .HasColumnType("nvarchar(70)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("AddressLine2")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Country")
                         .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasMaxLength(160)
-                        .HasColumnType("nvarchar(160)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(160)
-                        .HasColumnType("nvarchar(160)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(24)
-                        .HasColumnType("nvarchar(24)");
-
-                    b.Property<string>("PostalCode")
-                        .IsRequired()
-                        .HasMaxLength(24)
-                        .HasColumnType("nvarchar(24)");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("Username")
+                    b.Property<string>("OrderStatus")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OrganisationChoice")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("OrganisationId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("OrderId");
+
+                    b.HasIndex("OrganisationId");
 
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("ID.Models.OrderDetail", b =>
+                {
+                    b.Property<string>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PackageId");
+
+                    b.ToTable("OrderDetails");
+                });
+
             modelBuilder.Entity("ID.Models.Organisation", b =>
                 {
-                    b.Property<string>("OrganisationID")
+                    b.Property<string>("OrganisationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -117,14 +152,14 @@ namespace ID.Migrations
                     b.Property<string>("Pic")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OrganisationID");
+                    b.HasKey("OrganisationId");
 
                     b.ToTable("Organisations");
                 });
 
-            modelBuilder.Entity("ID.Models.Packages", b =>
+            modelBuilder.Entity("ID.Models.Package", b =>
                 {
-                    b.Property<string>("PackageID")
+                    b.Property<string>("PackageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -143,15 +178,38 @@ namespace ID.Migrations
                     b.Property<string>("Pic")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PackageID");
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.ToTable("Package1");
+                    b.HasKey("PackageId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("Packages");
+                });
+
+            modelBuilder.Entity("ID.Models.PackageNav", b =>
+                {
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("PackageId", "SupplierId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("PackageNavs");
                 });
 
             modelBuilder.Entity("ID.Models.Supplier", b =>
                 {
-                    b.Property<string>("SupplierID")
+                    b.Property<string>("SupplierId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PackageId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Pic")
@@ -163,21 +221,26 @@ namespace ID.Migrations
                     b.Property<string>("SupplierName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SupplierID");
+                    b.HasKey("SupplierId");
+
+                    b.HasIndex("PackageId");
 
                     b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("ID.Models.Volunteers", b =>
                 {
+                    b.Property<string>("VolunteerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("VolFName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VolLName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VolunteerId")
-                        .HasColumnType("int");
+                    b.HasKey("VolunteerId");
 
                     b.ToTable("Volunteer");
                 });
@@ -380,11 +443,70 @@ namespace ID.Migrations
 
             modelBuilder.Entity("ID.Models.Cart", b =>
                 {
-                    b.HasOne("ID.Models.Packages", "Packages")
+                    b.HasOne("ID.Models.Package", "Package")
                         .WithMany()
-                        .HasForeignKey("PackagesPackageID");
+                        .HasForeignKey("PackageId");
+
+                    b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("ID.Models.Order", b =>
+                {
+                    b.HasOne("ID.Models.Organisation", "Organisation")
+                        .WithMany()
+                        .HasForeignKey("OrganisationId");
+
+                    b.Navigation("Organisation");
+                });
+
+            modelBuilder.Entity("ID.Models.OrderDetail", b =>
+                {
+                    b.HasOne("ID.Models.Order", "Order")
+                        .WithMany("OrderLines")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("ID.Models.Package", "Packages")
+                        .WithMany()
+                        .HasForeignKey("PackageId");
+
+                    b.Navigation("Order");
 
                     b.Navigation("Packages");
+                });
+
+            modelBuilder.Entity("ID.Models.Package", b =>
+                {
+                    b.HasOne("ID.Models.Supplier", "Supplier")
+                        .WithMany()
+                        .HasForeignKey("SupplierId");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("ID.Models.PackageNav", b =>
+                {
+                    b.HasOne("ID.Models.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ID.Models.Supplier", "Supplier")
+                        .WithMany("Packagenav")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Package");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("ID.Models.Supplier", b =>
+                {
+                    b.HasOne("ID.Models.Package", null)
+                        .WithMany("Suppliers")
+                        .HasForeignKey("PackageId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -436,6 +558,21 @@ namespace ID.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ID.Models.Order", b =>
+                {
+                    b.Navigation("OrderLines");
+                });
+
+            modelBuilder.Entity("ID.Models.Package", b =>
+                {
+                    b.Navigation("Suppliers");
+                });
+
+            modelBuilder.Entity("ID.Models.Supplier", b =>
+                {
+                    b.Navigation("Packagenav");
                 });
 #pragma warning restore 612, 618
         }

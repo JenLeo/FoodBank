@@ -40,9 +40,9 @@ namespace ID.Models
         [Display(Name = "Supplier ")]
         public string SupplierId { get; set; }
 
-        //public string SupplierName { get; set; }
 
-        public Supplier Supplier { get; set; }
+        public virtual ICollection<Supplier> Suppliers { get; set; }
+        public virtual Supplier Supplier { get; set; }
     }
     public enum PackageTypes
     {

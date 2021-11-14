@@ -23,7 +23,7 @@ namespace ID
 
 
         public DbSet<Supplier> Suppliers { get; set; }
-
+        public DbSet<PackageNav> PackageNavs { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
@@ -31,7 +31,25 @@ namespace ID
 
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Volunteers> Volunteer { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Cart>().ToTable("Carts");
+            builder.Entity<Package>().ToTable("Packages");
+            builder.Entity<Volunteers>().ToTable("Volunteer");
+            builder.Entity<Supplier>().ToTable("Suppliers");
+            builder.Entity<Order>().ToTable("Orders");
+            builder.Entity<OrderDetail>().ToTable("OrderDetails");
+            builder.Entity<Organisation>().ToTable("Organisations");
+            builder.Entity<PackageNav>().ToTable("PackageNavs");
+            base.OnModelCreating(builder);
 
+            builder.Entity<PackageNav>()
+                .HasKey(p => new
+                {
+                    p.PackageId,
+                    p.SupplierId
+                });
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -48,25 +66,6 @@ namespace ID
 
             }
         }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.Entity<Packages>(entity =>
-        //    {
-        //        entity.Property(e => e.PackageID).ValueGeneratedNever();
-
-        //        entity.HasOne(d => d.Cart)
-        //            .WithMany(p => p.Packages)
-        //            .HasForeignKey(d => d.car)
-        //            .HasConstraintName("FK_Patients_Sex");
-        //    });
-
-
-        //    modelBuilder.Entity<Cart>(entity =>
-        //    {
-        //        entity.Property(e => e.TypeId).ValueGeneratedNever();
-        //    });
-
-        //    OnModelCreating(modelBuilder);
-        //}
+        
     }
 }

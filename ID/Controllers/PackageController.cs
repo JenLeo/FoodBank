@@ -74,7 +74,12 @@ namespace ID.Controllers
 
             var pks = from p in _context.Packages
                       select p;
+            
+                       
 
+            //    var pks = _context.Packages
+            //.Include(p => p.Supplier)
+            //.AsNoTracking();
             if (!String.IsNullOrEmpty(searchString))
             {
                 pks = pks.Where(p => p.PackageNameId.Contains(searchString) || p.PackageDetail.Contains(searchString)
@@ -107,7 +112,6 @@ namespace ID.Controllers
             return View(await PaginatedList<Package>.CreateAsync(pks.AsNoTracking(), pageNumber ?? 1, pageSize));
 
 
-            //return View(pks);
 
         }
 
@@ -119,7 +123,8 @@ namespace ID.Controllers
                 return NotFound();
             }
 
-            var _pack = await _context.Packages.FirstOrDefaultAsync(m => m.PackageId == id);
+            var _pack = await _context.Packages
+                .FirstOrDefaultAsync(m => m.PackageId == id);
             if (_pack == null)
             {
                 return NotFound();
@@ -153,7 +158,8 @@ namespace ID.Controllers
                 SupplierId = svm.SupplierId,
                 Pic = stringFileName
             };
-            _context.Packages.Add(package);
+            _context.Packages
+                .Add(package);
             _context.SaveChanges();
 
            return RedirectToAction("Index");
@@ -183,7 +189,8 @@ namespace ID.Controllers
                 return NotFound();
             }
 
-            var _pk = await _context.Packages.FindAsync(id);
+            var _pk = await _context.Packages
+                .FindAsync(id);
             if (_pk == null)
             {
                 return NotFound();
@@ -195,7 +202,7 @@ namespace ID.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(String id, [Bind("PackageId,PackageNameId,PackageDetail,PackageType,PackagePrice,SupplierId,Pic")] Package _pkg, Supplier sp)
+        public async Task<IActionResult> Edit(String id, [Bind("PackageId,PackageNameId,PackageDetail,PackageType,PackagePrice,SupplierId,Pic")] Package _pkg)
         {
             
             if (id != _pkg.PackageId)
@@ -252,15 +259,18 @@ namespace ID.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string Id)
         {
-            var _package = await _context.Packages.FindAsync(Id);
-            _context.Packages.Remove(_package);
+            var _package = await _context.Packages
+                .FindAsync(Id);
+            _context.Packages
+                .Remove(_package);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ItemExists(string id)
         {
-            return _context.Packages.Any(e => e.PackageId == id);
+            return _context.Packages
+                .Any(e => e.PackageId == id);
         }
     }
 }

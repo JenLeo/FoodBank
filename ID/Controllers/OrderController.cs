@@ -139,7 +139,7 @@ namespace ID.Controllers
             var organisationsQuery = from d in _context.Organisations
                                    orderby d.OrganisationName
                                    select d;
-            ViewBag.DepartmentID = new SelectList(organisationsQuery.AsNoTracking(), "OrganisationId", "OrganisationName", selectedOrganisation);
+            ViewBag.OrganisationId = new SelectList(organisationsQuery.AsNoTracking(), "OrganisationId", "OrganisationName", selectedOrganisation);
         }
 
         private bool ItemExists(string orderId)

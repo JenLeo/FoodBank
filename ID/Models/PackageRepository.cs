@@ -72,7 +72,7 @@ namespace ID.Models
                 PackageDetail = _package.PackageDetail,
                 PackageType = _package.PackageType,
                 PackagePrice = _package.PackagePrice,
-                SupplierId = _package.Supplier.SupplierId,
+                //SupplierId = _package.Supplier.SupplierId,
 
                 Pic = _package.Pic
                 
@@ -120,7 +120,7 @@ namespace ID.Models
             pk.PackageType = _package.PackageType;
             pk.PackagePrice = _package.PackagePrice;
             pk.Pic = _package.Pic;
-            pk.SupplierId = _package.Supplier.SupplierId;
+            //pk.SupplierId = _package.Supplier.SupplierId;
 
 
             await _context.SaveChangesAsync();

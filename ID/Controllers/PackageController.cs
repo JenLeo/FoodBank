@@ -42,24 +42,12 @@ namespace ID.Controllers
             this.webHostEnv = webHostEnv;
         }
 
-        //public IActionResult Index()
-        //{
-        //    var PackageViewModel = new PackageViewModel
-        //    {
-            
-        //    };
-        //    return View(PackageViewModel);
-        //}
         public async Task<IActionResult> Index(string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {
-
-
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "Type";
-            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
-
-
+            ViewData["DateSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
 
             if (searchString != null)
             {
@@ -72,14 +60,10 @@ namespace ID.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var pks = from p in _context.Packages
-                      select p;
-            
-                       
+            var pks = _context.Packages
+       .Include(c => c.Supplier)
+       .AsNoTracking();
 
-            //    var pks = _context.Packages
-            //.Include(p => p.Supplier)
-            //.AsNoTracking();
             if (!String.IsNullOrEmpty(searchString))
             {
                 pks = pks.Where(p => p.PackageNameId.Contains(searchString) || p.PackageDetail.Contains(searchString)
@@ -109,11 +93,10 @@ namespace ID.Controllers
             }
 
             int pageSize = 3;
+
             return View(await PaginatedList<Package>.CreateAsync(pks.AsNoTracking(), pageNumber ?? 1, pageSize));
-
-
-
         }
+      
 
         //GET: Package/Details/5
         public async Task<IActionResult> Details(string id)
@@ -124,6 +107,8 @@ namespace ID.Controllers
             }
 
             var _pack = await _context.Packages
+                   .Include(c => c.Supplier)
+                    .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.PackageId == id);
             if (_pack == null)
             {
@@ -135,34 +120,41 @@ namespace ID.Controllers
 
 
 
-       // GET: PackageController/Create
-       //[Authorize/*(Roles = "Admin")]
+        // GET: PackageController/Create
+        //[Authorize/*(Roles = "Admin")]
         public IActionResult Create()
         {
+            PopulateSuppliersDropDownList();
             return View();
         }
 
         // POST: PackageController/Create
         [HttpPost]
-        public IActionResult Create(PackageViewModel vm, SupplierViewModel svm)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("PackageId,PackageNameId,PackageDetail,PackageType,PackagePrice,SupplierId,Pic")] PackageViewModel vm)
             {
-           
-            string stringFileName = UploadFile(vm);
-            var package = new Package
+            if (ModelState.IsValid)
             {
-                PackageId = vm.PackageId,
-                PackageNameId = vm.PackageNameId,
-                PackageDetail = vm.PackageDetail,
-                PackageType = vm.PackageType,
-                PackagePrice = vm.PackagePrice,
-                SupplierId = svm.SupplierId,
-                Pic = stringFileName
-            };
-            _context.Packages
-                .Add(package);
-            _context.SaveChanges();
 
-           return RedirectToAction("Index");
+                string stringFileName = UploadFile(vm);
+                var package = new Package
+                {
+                    PackageId = vm.PackageId,
+                    PackageNameId = vm.PackageNameId,
+                    PackageDetail = vm.PackageDetail,
+                    PackageType = vm.PackageType,
+                    PackagePrice = vm.PackagePrice,
+                    SupplierId = vm.SupplierId,
+                    Pic = stringFileName
+                };
+                _context.Packages
+                    .Add(package);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+                
+            }
+            PopulateSuppliersDropDownList(vm.SupplierId);
+            return RedirectToAction("Index");
             }
 
         private string UploadFile(PackageViewModel vm)
@@ -188,13 +180,15 @@ namespace ID.Controllers
             {
                 return NotFound();
             }
-
             var _pk = await _context.Packages
-                .FindAsync(id);
+       .AsNoTracking()
+       .FirstOrDefaultAsync(m => m.PackageId == id);
+      
             if (_pk == null)
             {
                 return NotFound();
             }
+            PopulateSuppliersDropDownList(_pk.PackageId);
             return View(_pk);
         }
 
@@ -209,32 +203,61 @@ namespace ID.Controllers
             {
                 return NotFound();
             }
+            var packageToUpdate = await _context.Packages
+                .FirstOrDefaultAsync(p => p.PackageId == id);
 
-            if (ModelState.IsValid)
+            if (await TryUpdateModelAsync<Package>(packageToUpdate, "",
+                p => p.PackageNameId, p => p.PackageDetail, 
+                p => p.PackageType, p => p.PackagePrice,
+                p => p.SupplierId, p => p.Pic))
             {
                 try
                 {
-                    
-                    _context.Update(_pkg);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException /* ex */)
                 {
-                    if (!ItemExists(_pkg.PackageId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(_pkg
+            //if (ModelState.IsValid)
+            //{
+            //    try
+            //    {
+
+            //        _context.Update(_pkg);
+            //        await _context.SaveChangesAsync();
+            //    }
+            //    catch (DbUpdateConcurrencyException)
+            //    {
+            //        if (!ItemExists(_pkg.PackageId))
+            //        {
+            //            return NotFound();
+            //        }
+            //        else
+            //        {
+            //            throw;
+            //        }
+            //    }
+            //    return RedirectToAction(nameof(Index));
+            //}
+            PopulateSuppliersDropDownList(packageToUpdate.SupplierId);
+            return View(packageToUpdate
                 );
         }
-       
+
+        private void PopulateSuppliersDropDownList(object selectedSupplier = null)
+        {
+            var suppliersQuery = from s in _context.Suppliers
+                                   orderby s.SupplierName
+                                   select s;
+            ViewBag.SupplierId = new SelectList(suppliersQuery.AsNoTracking(), "SupplierId", "SupplierName", selectedSupplier);
+        }
+
         // GET: Package/Delete/5
 
         public async Task<IActionResult> Delete(string id)
@@ -245,6 +268,8 @@ namespace ID.Controllers
             }
 
             var _package = await _context.Packages
+                        .Include(c => c.Supplier)
+                    .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.PackageId == id);
             if (_package == null)
             {

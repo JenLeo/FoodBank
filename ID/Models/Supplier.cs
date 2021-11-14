@@ -31,10 +31,8 @@ namespace ID.Models
         public string Pic { get; set; }
 
         public virtual ICollection<PackageNav> Packagenav {get; set; }
+        public ICollection<Package> Packages { get; set; }
 
-
-        //[ForeignKey("SupplierId")]
-        //public ICollection<Package> Packages { get; set; }
 
         //public List<Package> Packages { get; set; }
     }

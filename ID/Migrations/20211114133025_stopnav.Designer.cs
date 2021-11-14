@@ -4,14 +4,16 @@ using ID;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211114133025_stopnav")]
+    partial class stopnav
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,9 +209,6 @@ namespace ID.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("PackageId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Pic")
                         .HasColumnType("nvarchar(max)");
 
@@ -220,8 +219,6 @@ namespace ID.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SupplierId");
-
-                    b.HasIndex("PackageId");
 
                     b.ToTable("Suppliers");
                 });
@@ -475,7 +472,7 @@ namespace ID.Migrations
             modelBuilder.Entity("ID.Models.Package", b =>
                 {
                     b.HasOne("ID.Models.Supplier", "Supplier")
-                        .WithMany()
+                        .WithMany("Packages")
                         .HasForeignKey("SupplierId");
 
                     b.Navigation("Supplier");
@@ -484,13 +481,13 @@ namespace ID.Migrations
             modelBuilder.Entity("ID.Models.PackageNav", b =>
                 {
                     b.HasOne("ID.Models.Package", "Package")
-                        .WithMany()
+                        .WithMany("PackageNavs")
                         .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ID.Models.Supplier", "Supplier")
-                        .WithMany()
+                        .WithMany("Packagenav")
                         .HasForeignKey("SupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -498,13 +495,6 @@ namespace ID.Migrations
                     b.Navigation("Package");
 
                     b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("ID.Models.Supplier", b =>
-                {
-                    b.HasOne("ID.Models.Package", null)
-                        .WithMany("Suppliers")
-                        .HasForeignKey("PackageId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -565,7 +555,14 @@ namespace ID.Migrations
 
             modelBuilder.Entity("ID.Models.Package", b =>
                 {
-                    b.Navigation("Suppliers");
+                    b.Navigation("PackageNavs");
+                });
+
+            modelBuilder.Entity("ID.Models.Supplier", b =>
+                {
+                    b.Navigation("Packagenav");
+
+                    b.Navigation("Packages");
                 });
 #pragma warning restore 612, 618
         }

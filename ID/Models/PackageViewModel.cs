@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,14 +35,14 @@ namespace ID.Models
 
         [Display(Name = "Price: ")]
         public decimal PackagePrice { get; set; }
-        
-        //[Display(Name = "Supplier ")]
-        //public string SupplierId { get; set; }
+
+        [Display(Name = "Supplier ")]
+        public string SupplierId { get; set; }
 
         //public List<SelectListItem> Suppliers { get; set; }
-        public List<Supplier> Suppliers { get; set; }
-
-        public virtual Supplier Supplier { get; set; }
+        public IEnumerable<Package> Packages { get; set; }
+        public IEnumerable<Supplier> Suppliers { get; set; }
+        //public Supplier Supplier { get; set; }
 
         [Display(Name = " ")]
         public IFormFile Pic { get; set; }

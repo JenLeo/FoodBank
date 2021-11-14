@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -33,7 +34,8 @@ namespace ID.Models
         [Display(Name = "Price (€): ")]
         [Column(TypeName = "decimal(18, 2)")]
         public decimal PackagePrice { get; set; }
-    
+
+       
         public string Pic { get; set; }
 
         [ForeignKey("Supplier")]
@@ -41,8 +43,10 @@ namespace ID.Models
         public string SupplierId { get; set; }
 
 
-        public virtual ICollection<Supplier> Suppliers { get; set; }
-        public virtual Supplier Supplier { get; set; }
+        //public virtual ICollection<Supplier> Supplier { get; set; }
+        public Supplier Supplier { get; set; }
+        public ICollection<PackageNav> PackageNavs { get; set; }
+
     }
     public enum PackageTypes
     {

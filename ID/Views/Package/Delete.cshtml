@@ -26,6 +26,20 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PackageId)
         </dd>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PackageNameId)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PackageNameId)
+        </dd>
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PackageDetail)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PackageDetail)
+        </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.PackageType)
         </dt>
@@ -37,6 +51,12 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PackagePrice)
+        </dd>
+        <dd class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Supplier)
+        </dd>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Supplier.SupplierName)
         </dd>
     </dl>
 

@@ -1,10 +1,10 @@
-﻿@model PaginatedList<ID.Models.Package>
+﻿@model PaginatedList<Package>
 
 @{
     ViewData["Title"] = "Packages";
 }
-<h3>Packages</h3>
 
+<h2>Packages</h2>
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
@@ -14,74 +14,93 @@
         </p>
     </div>
 </form>
-<table class="table">
-    <tr>
-
-        <th>
-            
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Package</a>
-        </th>
-        <th>
-                Description
+<p>
+    <a asp-action="Create">Add new package</a>
+</p>
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PackageNameId)
             </th>
-        <th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Type</a>
-        </th>
-        <th>
-            @*<a asp-page="./Index" asp-route-sortOrder="@Model.PriceSort">
-                @Html.DisplayNameFor(model => model.Packages[0].PackagePrice)
-            </a>*@
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
-        </th>
-        <th>
-            Supplier
-        </th>
-
-    </tr>
-    @foreach (var packages in Model)
-
-    {
-<tr>
-    <td>
-
-        @Html.DisplayFor(modelItem => packages.PackageNameId)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => packages.PackageDetail)
-    </td>
-    <td>
-
-        @Html.DisplayFor(modelItem => packages.PackageType)
-    </td>
-
-    <td>
-        @Html.DisplayFor(modelItem => packages.PackagePrice)
-
-    </td>
-   <td>
-    @Html.DisplayFor(modelItem => packages.Supplier.SupplierId)
-    @*<td class="text-left">@packages.Supplier.SupplierId</td>*@
-    @*@packages.Supplier.SupplierName*@
-    </td>
-    <td>
-        <img src="~/images/@packages.Pic" class="rounded-circle" width="80" height="80" asp-append-version="true" />
-    </td>
-
-    <td>
-        <p class="button">
-            <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
-               asp-route-PackageID="@packages.PackageId">Add to cart</a>
-        </p>
-        <a asp-action="Edit" asp-route-id="@packages.PackageId">Edit</a> |
-        <a asp-action="Details" asp-route-id="@packages.PackageId">Details</a> |
-        <a asp-action="Delete" asp-route-id="@packages.PackageId">Delete</a>
-    </td>
+            <th>
+                @Html.DisplayNameFor(model => model.PackageDetail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PackageType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PackagePrice)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supplier)
+            </th>
 
 
-</tr>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>*@
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Package</a>
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Type</a>
 
-    }
-</table>
+                    </th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
+                    </th>
+                    <th>
+                        Supplier
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PackageNameId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PackageDetail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PackageType)
+                        </td>
+                        <th>
+                            @Html.DisplayFor(modelItem => item.PackagePrice)
+                        </th>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+                        </td>
+                        <td>
+                            <img src="~/images/@item.Pic" class="rounded-circle" width="80" height="80" asp-append-version="true" />
+                        </td>
+                        <td>
+                            <p class="button">
+                                <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
+                                   asp-route-PackageID="@item.PackageId">Add to cart</a>
+                            </p>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.PackageId">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.PackageId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.PackageId">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
 <br />
 
 @{

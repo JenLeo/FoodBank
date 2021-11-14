@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 
 namespace ID.Models
 {
-   
-    
     public class Package
     {
 
@@ -42,8 +40,6 @@ namespace ID.Models
         [Display(Name = "Supplier ")]
         public string SupplierId { get; set; }
 
-
-        //public virtual ICollection<Supplier> Supplier { get; set; }
         public Supplier Supplier { get; set; }
         public ICollection<PackageNav> PackageNavs { get; set; }
 

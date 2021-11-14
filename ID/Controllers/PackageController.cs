@@ -92,7 +92,7 @@ namespace ID.Controllers
                     break;
             }
 
-            int pageSize = 3;
+            int pageSize = 5;
 
             return View(await PaginatedList<Package>.CreateAsync(pks.AsNoTracking(), pageNumber ?? 1, pageSize));
         }

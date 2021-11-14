@@ -76,11 +76,14 @@ namespace ID.Models
         [Display(Name = "Status")]
         [DisplayFormat(NullDisplayText = "Pending")]
         public string OrderStatus { get; set; }
-        public string OrganisationId { get; set; }
-        public virtual Organisation Organisation { get; set; }
-        //public virtual List<Organisation> organisations { get; set; }
-    }
 
+        [ForeignKey("Organisation ")]
+        [Display(Name = "Organisation ")]
+        public string OrganisationId { get; set; }
+        public Organisation Organisation { get; set; }
+       
+    }
+ 
     public enum OrderStatusOptions
     {
         Pending,

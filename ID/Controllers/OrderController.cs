@@ -1,6 +1,7 @@
 ﻿using ID.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace ID.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+           
             var items = _context.Orders.ToList();
             return View(items);
         }
@@ -59,6 +61,8 @@ namespace ID.Controllers
             return View(await or.ToListAsync());
 
         }
+
+        
 
         public async Task<IActionResult> Details(string id)
         {
@@ -129,6 +133,13 @@ namespace ID.Controllers
             }
             return View(_or
                 );
+        }
+        private void PopulateOrganisationsDropDownList(object selectedOrganisation = null)
+        {
+            var organisationsQuery = from d in _context.Organisations
+                                   orderby d.OrganisationName
+                                   select d;
+            ViewBag.DepartmentID = new SelectList(organisationsQuery.AsNoTracking(), "OrganisationId", "OrganisationName", selectedOrganisation);
         }
 
         private bool ItemExists(string orderId)

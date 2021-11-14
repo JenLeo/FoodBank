@@ -25,7 +25,9 @@ namespace ID.Models
         [Display(Name = " ")]
         public string Pic { get; set; }
 
-      
+        public ICollection<Order> Orders { get; set; }
+
+
 
     }
 }

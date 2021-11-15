@@ -10,112 +10,112 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211011195008_update")]
-    partial class update
+    [Migration("20211115175515_order")]
+    partial class order
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.10")
+                .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("ID.Models.Cart", b =>
                 {
                     b.Property<string>("CartId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("AddedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CartStatusId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<string>("MemberId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PackageId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PackagesPackageID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("UpdatedOn")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ShoppingCartId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CartId");
 
-                    b.HasIndex("PackagesPackageID");
+                    b.HasIndex("PackageId");
 
                     b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("ID.Models.Order", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<string>("OrderId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Address")
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("AddressLine2")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Phone")
+                    b.Property<string>("OrderStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostalCode")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("OrganisationId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,4)");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("OrganisationId");
 
                     b.ToTable("Orders");
                 });
 
             modelBuilder.Entity("ID.Models.OrderDetail", b =>
                 {
-                    b.Property<int>("OrderDetailId")
+                    b.Property<string>("OrderDetailId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PackageId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PackagesPackageID")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Quantity")
@@ -128,14 +128,14 @@ namespace ID.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("PackagesPackageID");
+                    b.HasIndex("PackageId");
 
                     b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("ID.Models.Organisation", b =>
                 {
-                    b.Property<string>("OrganisationID")
+                    b.Property<string>("OrganisationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -148,14 +148,14 @@ namespace ID.Migrations
                     b.Property<string>("Pic")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OrganisationID");
+                    b.HasKey("OrganisationId");
 
                     b.ToTable("Organisations");
                 });
 
-            modelBuilder.Entity("ID.Models.Packages", b =>
+            modelBuilder.Entity("ID.Models.Package", b =>
                 {
-                    b.Property<string>("PackageID")
+                    b.Property<string>("PackageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -166,7 +166,7 @@ namespace ID.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PackagePrice")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("PackageType")
                         .HasColumnType("nvarchar(max)");
@@ -174,14 +174,34 @@ namespace ID.Migrations
                     b.Property<string>("Pic")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PackageID");
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.ToTable("Package1");
+                    b.HasKey("PackageId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("Packages");
+                });
+
+            modelBuilder.Entity("ID.Models.PackageNav", b =>
+                {
+                    b.Property<string>("PackageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SupplierId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("PackageId", "SupplierId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("PackageNavs");
                 });
 
             modelBuilder.Entity("ID.Models.Supplier", b =>
                 {
-                    b.Property<string>("SupplierID")
+                    b.Property<string>("SupplierId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
@@ -194,21 +214,24 @@ namespace ID.Migrations
                     b.Property<string>("SupplierName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SupplierID");
+                    b.HasKey("SupplierId");
 
                     b.ToTable("Suppliers");
                 });
 
             modelBuilder.Entity("ID.Models.Volunteers", b =>
                 {
+                    b.Property<string>("VolunteerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("VolFName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("VolLName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VolunteerId")
-                        .HasColumnType("int");
+                    b.HasKey("VolunteerId");
 
                     b.ToTable("Volunteer");
                 });
@@ -356,12 +379,10 @@ namespace ID.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -398,12 +419,10 @@ namespace ID.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -415,28 +434,63 @@ namespace ID.Migrations
 
             modelBuilder.Entity("ID.Models.Cart", b =>
                 {
-                    b.HasOne("ID.Models.Packages", "Packages")
+                    b.HasOne("ID.Models.Package", "Package")
                         .WithMany()
-                        .HasForeignKey("PackagesPackageID");
+                        .HasForeignKey("PackageId");
 
-                    b.Navigation("Packages");
+                    b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("ID.Models.Order", b =>
+                {
+                    b.HasOne("ID.Models.Organisation", "Organisation")
+                        .WithMany("Orders")
+                        .HasForeignKey("OrganisationId");
+
+                    b.Navigation("Organisation");
                 });
 
             modelBuilder.Entity("ID.Models.OrderDetail", b =>
                 {
                     b.HasOne("ID.Models.Order", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("OrderLines")
+                        .HasForeignKey("OrderId");
 
-                    b.HasOne("ID.Models.Packages", "Packages")
+                    b.HasOne("ID.Models.Package", "Packages")
                         .WithMany()
-                        .HasForeignKey("PackagesPackageID");
+                        .HasForeignKey("PackageId");
 
                     b.Navigation("Order");
 
                     b.Navigation("Packages");
+                });
+
+            modelBuilder.Entity("ID.Models.Package", b =>
+                {
+                    b.HasOne("ID.Models.Supplier", "Supplier")
+                        .WithMany("Packages")
+                        .HasForeignKey("SupplierId");
+
+                    b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("ID.Models.PackageNav", b =>
+                {
+                    b.HasOne("ID.Models.Package", "Package")
+                        .WithMany("PackageNavs")
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ID.Models.Supplier", "Supplier")
+                        .WithMany("Packagenav")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Package");
+
+                    b.Navigation("Supplier");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -492,7 +546,24 @@ namespace ID.Migrations
 
             modelBuilder.Entity("ID.Models.Order", b =>
                 {
-                    b.Navigation("OrderDetails");
+                    b.Navigation("OrderLines");
+                });
+
+            modelBuilder.Entity("ID.Models.Organisation", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("ID.Models.Package", b =>
+                {
+                    b.Navigation("PackageNavs");
+                });
+
+            modelBuilder.Entity("ID.Models.Supplier", b =>
+                {
+                    b.Navigation("Packagenav");
+
+                    b.Navigation("Packages");
                 });
 #pragma warning restore 612, 618
         }

@@ -46,8 +46,8 @@ namespace ID.Controllers
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "Type";
-            ViewData["DateSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+            ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "PackageType";
+            ViewData["DateSortParm"] = sortOrder == "Price" ? "price_desc" : "PackagePrice";
 
             if (searchString != null)
             {
@@ -188,7 +188,7 @@ namespace ID.Controllers
             {
                 return NotFound();
             }
-            PopulateSuppliersDropDownList(_pk.PackageId);
+            PopulateSuppliersDropDownList(_pk.SupplierId);
             return View(_pk);
         }
 
@@ -196,10 +196,13 @@ namespace ID.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(String id, [Bind("PackageId,PackageNameId,PackageDetail,PackageType,PackagePrice,SupplierId,Pic")] Package _pkg)
+        public async Task<IActionResult> EditPost(string? id)
+        //    [Bind("PackageId,PackageNameId,PackageDetail,PackageType,PackagePrice,SupplierId,Pic")]
+        //Package _pkg)
         {
-            
-            if (id != _pkg.PackageId)
+
+            //if (id != _pkg.PackageId)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -215,36 +218,15 @@ namespace ID.Controllers
                 {
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateException /* ex */)
+                catch (DbUpdateException)
                 {
-                    //Log the error (uncomment ex variable name and write a log.)
+                   
                     ModelState.AddModelError("", "Unable to save changes. " +
                         "Try again, and if the problem persists, " +
                         "see your system administrator.");
                 }
                 return RedirectToAction(nameof(Index));
             }
-            //if (ModelState.IsValid)
-            //{
-            //    try
-            //    {
-
-            //        _context.Update(_pkg);
-            //        await _context.SaveChangesAsync();
-            //    }
-            //    catch (DbUpdateConcurrencyException)
-            //    {
-            //        if (!ItemExists(_pkg.PackageId))
-            //        {
-            //            return NotFound();
-            //        }
-            //        else
-            //        {
-            //            throw;
-            //        }
-            //    }
-            //    return RedirectToAction(nameof(Index));
-            //}
             PopulateSuppliersDropDownList(packageToUpdate.SupplierId);
             return View(packageToUpdate
                 );

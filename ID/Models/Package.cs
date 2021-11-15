@@ -41,6 +41,7 @@ namespace ID.Models
         public string SupplierId { get; set; }
 
         public Supplier Supplier { get; set; }
+      
         public ICollection<PackageNav> PackageNavs { get; set; }
 
     }

@@ -2,7 +2,7 @@
 
 namespace ID.Migrations
 {
-    public partial class stopnav : Migration
+    public partial class fkfix : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -9,7 +9,7 @@
     <div class="form-actions no-color">
         <p>
             Find: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
+            <input type="submit" value="Search" />
             <a asp-action="Index"> Back to Full List</a>
         </p>
     </div>
@@ -42,36 +42,37 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PackageNameId)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PackageDetail)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.PackageType)
-                        </td>
-                        <th>
-                            @Html.DisplayFor(modelItem => item.PackagePrice)
-                        </th>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
-                        </td>
-                        <td>
-                            <img src="~/images/@item.Pic" class="rounded-circle" width="80" height="80" asp-append-version="true" />
-                        </td>
-                        <td>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PackageNameId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PackageDetail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PackageType)
+                    </td>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.PackagePrice)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+                    </td>
+                    <td>
+                        <img src="~/images/@item.Pic" class="rounded-circle" width="80" height="80" asp-append-version="true" />
+                    </td>
+                    <td>
+                    
                             <p class="button">
                                 <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
-                                   asp-route-PackageID="@item.PackageId">Add to cart</a>
+                                   asp-route-PackageID="@item.PackageId">Add to cart  </a>
                             </p>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.PackageId">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.PackageId">Details</a> |
-                            <a asp-action="Delete" asp-route-id="@item.PackageId">Delete</a>
-                        </td>
-                    </tr>
+                        
+                        <a asp-action="Edit" asp-route-id="@item.PackageId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.PackageId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.PackageId">Delete</a>
+                    </td>
+                </tr>
                 }
             </tbody>
         </table>

@@ -27,22 +27,32 @@ namespace ID.Controllers
             _context = Context;
             this.webHostEnv = webHostEnv;
         }
-        [HttpGet]
-        public IActionResult Index()
-        {
-           
-            var items = _context.Orders.ToList();
-            return View(items);
-        }
 
-        public async Task<IActionResult> Index(string searchString, string searchLocation)
+        public async Task<IActionResult> Index(string searchString, string searchLocation, string sortOrder, string currentFilter, int? pageNumber)
         {
-            var or = from o in _context.Orders
-                     select o;
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["StatusSortParm"] = String.IsNullOrEmpty(sortOrder) ? "status_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "OrderDate";
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "OrganisationName"; ;
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var ord = _context.Orders
+       .Include(o => o.Organisation)
+       .AsNoTracking();
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                or = or.Where(o => o.FirstName.Contains(searchString) ||
+                ord = ord.Where(o => o.FirstName.Contains(searchString) ||
                 o.LastName.Contains(searchString) ||
                 o.PhoneNumber.Contains(searchString) ||
                 o.Email.Contains(searchString) ||
@@ -53,16 +63,38 @@ namespace ID.Controllers
             }
             if (!String.IsNullOrEmpty(searchLocation))
             {
-                or = or.Where(o => o.AddressLine1.Contains(searchLocation) ||
+                ord = ord.Where(o => o.AddressLine1.Contains(searchLocation) ||
                 o.AddressLine2.Contains(searchLocation) ||
                 o.City.Contains(searchLocation) ||
                 o.Country.Contains(searchLocation));
             }
-            return View(await or.ToListAsync());
 
+            switch (sortOrder)
+            {
+                case "status_desc":
+                    ord.OrderByDescending(o => o.OrderStatus);
+                    break;
+                case "Date":
+                    ord.OrderBy(o => o.OrderDate);
+                    break;
+                case "date_desc":
+                    ord.OrderByDescending(o => o.OrderDate);
+                    break;
+                case "Name":
+                    ord.OrderBy(o => o.Organisation.OrganisationName);
+                    break;
+                case "name_desc":
+                    ord.OrderByDescending(o => o.Organisation.OrganisationName);
+                    break;
+                default:
+                    ord.OrderBy(o => o.OrderStatus);
+                    break;
+            }
+
+            int pageSize = 5;
+
+            return View(await PaginatedList<Order>.CreateAsync(ord.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
-
-        
 
         public async Task<IActionResult> Details(string id)
         {
@@ -71,15 +103,17 @@ namespace ID.Controllers
                 return NotFound();
             }
 
-            var _ord = await _context.Orders.FirstOrDefaultAsync(m => m.OrderId == id);
-            if (_ord == null)
+            var _order = await _context.Orders
+                   .Include(c => c.Organisation)
+                    .AsNoTracking()
+                .FirstOrDefaultAsync(m => m.OrderId == id);
+            if (_order == null)
             {
                 return NotFound();
             }
 
-            return View(_ord);
+            return View(_order);
         }
-
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -87,53 +121,59 @@ namespace ID.Controllers
             {
                 return NotFound();
             }
+            var _or = await _context.Orders
+       .AsNoTracking()
+       .FirstOrDefaultAsync(m => m.OrderId == id);
 
-            var _or = await _context.Orders.FindAsync(id);
             if (_or == null)
             {
                 return NotFound();
             }
+            PopulateOrganisationsDropDownList(_or.OrganisationId);
             return View(_or);
         }
 
+        // POST: Package/Edit/5
 
-
-        // POST: OrderController/Edit/5
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        //OrderId,FirstName,LastName,AddressLine1," +
-           // "City,Country,PhoneNumber,Email,OrderDate,
-        public async Task<IActionResult> Edit(string id, [Bind("OrderId,FirstName,LastName,AddressLine1," +
-            "City,Country,PhoneNumber,Email,OrderDate,OrderStatus")] Order _or)
+        public async Task<IActionResult> EditPost(string? id)
         {
-            if (id != _or.OrderId)
+            if (id == null)
             {
                 return NotFound();
             }
+            var orderToUpdate = await _context.Orders
+                .FirstOrDefaultAsync(o => o.OrderId == id);
 
-            if (ModelState.IsValid)
+            if (await TryUpdateModelAsync<Order>(orderToUpdate, "",
+                o => o.OrderDate,
+                o => o.OrderStatus, o => o.OrganisationId,
+                o => o.FirstName, o => o.LastName,
+                o => o.AddressLine1, o => o.AddressLine2,
+                o => o.City, o => o.PhoneNumber,
+                o => o.Email, o => o.Country))
             {
                 try
                 {
-                    _context.Update(_or);
                     await _context.SaveChangesAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (DbUpdateException)
                 {
-                    if (!ItemExists(_or.OrderId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(_or
+            PopulateOrganisationsDropDownList(orderToUpdate.OrganisationId);
+            return View(orderToUpdate
                 );
         }
+
+
+       
         private void PopulateOrganisationsDropDownList(object selectedOrganisation = null)
         {
             var organisationsQuery = from d in _context.Organisations
@@ -152,11 +192,22 @@ namespace ID.Controllers
 
         public async Task<IActionResult> Delete(string id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            var _ord = await _context.Orders
+            var _order = await _context.Orders
+                        .Include(c => c.Organisation)
+                    .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.OrderId == id);
+            if (_order == null)
+            {
+                return NotFound();
+            }
 
-            return View(_ord);
+            return View(_order);
+            
         }
 
         // POST: OrderController/Delete/5
@@ -168,6 +219,7 @@ namespace ID.Controllers
             _context.Orders.Remove(_ord);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+
         }
 
     }

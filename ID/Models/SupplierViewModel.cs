@@ -9,13 +9,13 @@ namespace ID.Models
 {
     public class SupplierViewModel
     {
-        [Display(Name = "Partner's ID: ")]
+        [Display(Name = "Supplier ID: ")]
         public string SupplierId { get; set; }
 
-        [Display(Name = "Name: ")]
+        [Display(Name = "Supplier Name: ")]
         public string SupplierName { get; set; }
 
-        [Display(Name = "Location: ")]
+        [Display(Name = "Supplier Location: ")]
         public string SupplierAddress { get; set; }
         public IFormFile Pic { get; set; }
     }

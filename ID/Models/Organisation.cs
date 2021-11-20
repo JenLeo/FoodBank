@@ -13,13 +13,13 @@ namespace ID.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Organisation Id ")]
+        [Display(Name = "Organisation ID: ")]
         public string OrganisationId { get; set; }
 
-        [Display(Name = "Name ")]
+        [Display(Name = "Organisation Name: ")]
         public string OrganisationName { get; set; }
 
-        [Display(Name = "Location ")]
+        [Display(Name = "Organisation Location: ")]
         public string OrganisationAddress { get; set; }
 
         [Display(Name = " ")]

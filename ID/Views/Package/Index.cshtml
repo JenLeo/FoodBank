@@ -28,14 +28,14 @@
                     </th>
                     <th>
                         <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Type</a>
+                    </th>
+                    <th>
+                        Supplied By
+                    </th>
+                    <th>
+                        <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
+                    </th>
 
-                    </th>
-                    <th>
-                        <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Price</a>
-                    </th>
-                    <th>
-                        Supplier
-                    </th>
                     <th></th>
                 </tr>
             </thead>
@@ -43,31 +43,32 @@
                 @foreach (var item in Model)
                 {
                 <tr>
-                    <td>
+                    <th>
                         @Html.DisplayFor(modelItem => item.PackageNameId)
-                    </td>
+                    </th>
                     <td>
                         @Html.DisplayFor(modelItem => item.PackageDetail)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.PackageType)
                     </td>
-                    <th>
-                        @Html.DisplayFor(modelItem => item.PackagePrice)
-                    </th>
                     <td>
                         @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
                     </td>
                     <td>
+                        @Html.DisplayFor(modelItem => item.PackagePrice)
+                    </td>
+
+                    <td>
                         <img src="~/images/@item.Pic" class="rounded-circle" width="80" height="80" asp-append-version="true" />
                     </td>
                     <td>
-                    
-                            <p class="button">
-                                <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
-                                   asp-route-PackageID="@item.PackageId">Add to cart  </a>
-                            </p>
-                        
+
+                        <p class="button">
+                            <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="AddToShoppingCart"
+                               asp-route-PackageID="@item.PackageId">Add to cart  </a>
+                        </p>
+
                         <a asp-action="Edit" asp-route-id="@item.PackageId">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.PackageId">Details</a> |
                         <a asp-action="Delete" asp-route-id="@item.PackageId">Delete</a>

@@ -21,11 +21,11 @@ namespace ID.Models
     {
 
         private readonly AppDbContext _appDbContext;
-       
+
         public ShoppingCart(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
-            
+
         }
 
         public string ShoppingCartId { get; set; }
@@ -46,93 +46,92 @@ namespace ID.Models
 
             return new ShoppingCart(context) { ShoppingCartId = scartId };
         }
+ 
+public void AddToCart(Package package, int count)
+{
+    var shoppingCartItem =
+        _appDbContext.Carts.SingleOrDefault(
+            s => s.Package.PackageId == package.PackageId && s.ShoppingCartId == ShoppingCartId);
 
-
-        public void AddToCart(Package package, int count)
+    if (shoppingCartItem == null)
+    {
+        shoppingCartItem = new Cart
         {
-            var shoppingCartItem =
-                _appDbContext.Carts.SingleOrDefault(
-                    s => s.Package.PackageId == package.PackageId && s.ShoppingCartId == ShoppingCartId);
+            ShoppingCartId = ShoppingCartId,
+            PackageId = package.PackageId,
+            Count = 1
+        };
 
-            if (shoppingCartItem == null)
-            {
-                shoppingCartItem = new Cart
-                {
-                    ShoppingCartId = ShoppingCartId,
-                    Package = package,
-                    Count = 1
-                };
+        _appDbContext.Carts.Add(shoppingCartItem);
+    }
+    else
+    {
+        shoppingCartItem.Count++;
+    }
+    _appDbContext.SaveChanges();
+}
 
-                _appDbContext.Carts.Add(shoppingCartItem);
-            }
-            else
-            {
-                shoppingCartItem.Count++;
-            }
-            _appDbContext.SaveChanges();
-        }
+public int RemoveFromCart(Package Package)
+{
+    var shoppingCartItem =
+        _appDbContext.Carts.SingleOrDefault(
+            s => s.Package.PackageId == Package.PackageId && s.ShoppingCartId == ShoppingCartId);
 
-        public int RemoveFromCart(Package packages)
+    var localAmount = 0;
+
+    if (shoppingCartItem != null)
+    {
+        if (shoppingCartItem.Count > 1)
         {
-            var shoppingCartItem =
-                _appDbContext.Carts.SingleOrDefault(
-                    s => s.Package.PackageId == packages.PackageId && s.ShoppingCartId == ShoppingCartId);
-
-            var localAmount = 0;
-
-            if (shoppingCartItem != null)
-            {
-                if (shoppingCartItem.Count > 1)
-                {
-                    shoppingCartItem.Count--;
-                    localAmount = shoppingCartItem.Count;
-                }
-                else
-                {
-                    _appDbContext.Carts.Remove(shoppingCartItem);
-                }
-            }
-
-            _appDbContext.SaveChanges();
-
-            return localAmount;
+            shoppingCartItem.Count--;
+            localAmount = shoppingCartItem.Count;
         }
-
-        public List<Cart> GetShoppingCartItems()
+        else
         {
-            
-            return ShoppingCartItems ??
-                (ShoppingCartItems = 
-             _appDbContext.Carts.Where(
-            cart => cart.ShoppingCartId == ShoppingCartId)
-                .Include(c => c.Package)
-                .ToList());
-
-
+            _appDbContext.Carts.Remove(shoppingCartItem);
         }
+    }
 
-        public void ClearCart()
-        {
-            var cartItems = _appDbContext
-                .Carts
-                .Where(cart => cart.ShoppingCartId == ShoppingCartId);
+    _appDbContext.SaveChanges();
 
-            _appDbContext.Carts.RemoveRange(cartItems);
+    return localAmount;
+}
 
-            _appDbContext.SaveChanges();
-        }
+public List<Cart> GetShoppingCartItems()
+{
+
+    return ShoppingCartItems ??
+        (ShoppingCartItems =
+     _appDbContext.Carts.Where(
+    cart => cart.ShoppingCartId == ShoppingCartId)
+        .Include(c => c.Package)
+        .ToList());
+
+
+}
+
+public void ClearCart()
+{
+    var cartItems = _appDbContext
+        .Carts
+        .Where(cart => cart.ShoppingCartId == ShoppingCartId);
+
+    _appDbContext.Carts.RemoveRange(cartItems);
+
+    _appDbContext.SaveChanges();
+}
 
 
 
-        public decimal GetShoppingCartTotal()
-        {
-            var total = _appDbContext.Carts.Where(c => c.
-            ShoppingCartId == ShoppingCartId)
-                .Select(c => c.Package.PackagePrice * c.Count).Sum();
-            return total;
-           
+public decimal GetShoppingCartTotal()
+{
+    var total = _appDbContext.Carts.Where(c => c.
+    ShoppingCartId == ShoppingCartId)
+        .Select(c => c.Package.PackagePrice * c.Count).Sum();
+    return total;
 
-        }
+
+}
 
     }
 }

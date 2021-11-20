@@ -16,7 +16,7 @@ namespace ID.Models
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Package Id: ")]
+        [Display(Name = "Package ID: ")]
         public string PackageId { get; set; }
 
         [Display(Name = "Package: ")]
@@ -36,13 +36,14 @@ namespace ID.Models
        
         public string Pic { get; set; }
 
-        [ForeignKey("Supplier")]
-        [Display(Name = "Supplier ")]
+        [ForeignKey("Supplier :")]
+        [Display(Name = "Supplier: ")]
         public string SupplierId { get; set; }
 
+        [Display(Name = "Supplier: ")]
         public Supplier Supplier { get; set; }
-      
-        public ICollection<PackageNav> PackageNavs { get; set; }
+
+        public ICollection<OrderDetail> OrderDetails { get; set; }
 
     }
     public enum PackageTypes

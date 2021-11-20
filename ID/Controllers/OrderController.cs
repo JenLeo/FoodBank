@@ -48,6 +48,9 @@ namespace ID.Controllers
 
             var ord = _context.Orders
        .Include(o => o.Organisation)
+       .Include(c => c.Cart)
+       //.ThenInclude(p => p.Package)
+
        .AsNoTracking();
 
             if (!String.IsNullOrEmpty(searchString))
@@ -104,7 +107,9 @@ namespace ID.Controllers
             }
 
             var _order = await _context.Orders
-                   .Include(c => c.Organisation)
+                   .Include(o => o.Organisation)
+                   .Include(c => c.Cart)
+                    //.ThenInclude(p => p.Package)
                     .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (_order == null)
@@ -133,7 +138,7 @@ namespace ID.Controllers
             return View(_or);
         }
 
-        // POST: Package/Edit/5
+        // POST: OrderController/Edit/5
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
@@ -147,7 +152,7 @@ namespace ID.Controllers
                 .FirstOrDefaultAsync(o => o.OrderId == id);
 
             if (await TryUpdateModelAsync<Order>(orderToUpdate, "",
-                o => o.OrderDate,
+                o => o.OrderDate, o => o.CartId,
                 o => o.OrderStatus, o => o.OrganisationId,
                 o => o.FirstName, o => o.LastName,
                 o => o.AddressLine1, o => o.AddressLine2,
@@ -199,6 +204,8 @@ namespace ID.Controllers
 
             var _order = await _context.Orders
                         .Include(c => c.Organisation)
+                        .Include(o => o.Cart)
+                    
                     .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.OrderId == id);
             if (_order == null)

@@ -18,5 +18,8 @@ namespace ID.Models
         public string PackageId { get; set; }
         public Package Package { get; set; }
 
+        //public ICollection<CartOrder> CartOrder { get; set; }
+        public ICollection<Order> Order { get; set; }
+
     }
 }

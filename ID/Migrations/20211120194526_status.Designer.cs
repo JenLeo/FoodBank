@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211115165618_fkfix")]
-    partial class fkfix
+    [Migration("20211120194526_status")]
+    partial class status
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,6 +57,9 @@ namespace ID.Migrations
                     b.Property<string>("AddressLine2")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CartId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -88,10 +91,6 @@ namespace ID.Migrations
                     b.Property<string>("OrderStatus")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OrganisationChoice")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
                     b.Property<string>("OrganisationId")
                         .HasColumnType("nvarchar(450)");
 
@@ -104,6 +103,8 @@ namespace ID.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("CartId");
 
                     b.HasIndex("OrganisationId");
 
@@ -118,6 +119,9 @@ namespace ID.Migrations
 
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrderStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PackageId")
                         .HasColumnType("nvarchar(450)");
@@ -186,21 +190,6 @@ namespace ID.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("Packages");
-                });
-
-            modelBuilder.Entity("ID.Models.PackageNav", b =>
-                {
-                    b.Property<string>("PackageId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SupplierId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("PackageId", "SupplierId");
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("PackageNavs");
                 });
 
             modelBuilder.Entity("ID.Models.Supplier", b =>
@@ -447,9 +436,15 @@ namespace ID.Migrations
 
             modelBuilder.Entity("ID.Models.Order", b =>
                 {
+                    b.HasOne("ID.Models.Cart", "Cart")
+                        .WithMany("Order")
+                        .HasForeignKey("CartId");
+
                     b.HasOne("ID.Models.Organisation", "Organisation")
                         .WithMany("Orders")
                         .HasForeignKey("OrganisationId");
+
+                    b.Navigation("Cart");
 
                     b.Navigation("Organisation");
                 });
@@ -461,7 +456,7 @@ namespace ID.Migrations
                         .HasForeignKey("OrderId");
 
                     b.HasOne("ID.Models.Package", "Packages")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("PackageId");
 
                     b.Navigation("Order");
@@ -474,25 +469,6 @@ namespace ID.Migrations
                     b.HasOne("ID.Models.Supplier", "Supplier")
                         .WithMany("Packages")
                         .HasForeignKey("SupplierId");
-
-                    b.Navigation("Supplier");
-                });
-
-            modelBuilder.Entity("ID.Models.PackageNav", b =>
-                {
-                    b.HasOne("ID.Models.Package", "Package")
-                        .WithMany("PackageNavs")
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ID.Models.Supplier", "Supplier")
-                        .WithMany("Packagenav")
-                        .HasForeignKey("SupplierId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Package");
 
                     b.Navigation("Supplier");
                 });
@@ -548,6 +524,11 @@ namespace ID.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ID.Models.Cart", b =>
+                {
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("ID.Models.Order", b =>
                 {
                     b.Navigation("OrderLines");
@@ -560,13 +541,11 @@ namespace ID.Migrations
 
             modelBuilder.Entity("ID.Models.Package", b =>
                 {
-                    b.Navigation("PackageNavs");
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("ID.Models.Supplier", b =>
                 {
-                    b.Navigation("Packagenav");
-
                     b.Navigation("Packages");
                 });
 #pragma warning restore 612, 618

@@ -47,7 +47,7 @@ namespace ID.Controllers
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "PackageType";
-            ViewData["DateSortParm"] = sortOrder == "Price" ? "price_desc" : "PackagePrice";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "PackagePrice";
 
             if (searchString != null)
             {
@@ -197,11 +197,7 @@ namespace ID.Controllers
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPost(string? id)
-        //    [Bind("PackageId,PackageNameId,PackageDetail,PackageType,PackagePrice,SupplierId,Pic")]
-        //Package _pkg)
         {
-
-            //if (id != _pkg.PackageId)
             if (id == null)
             {
                 return NotFound();

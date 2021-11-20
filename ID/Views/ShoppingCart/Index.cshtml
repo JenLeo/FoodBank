@@ -4,13 +4,15 @@
 
 <div class="text-sm-right">
     <a class="btn btn-primary" asp-controller="Package" asp-action="Index"> << Continue Shopping</a>
-
+    
 </div>
 
 
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th>
+            </th>
             <th>Quantity</th>
             <th>Package</th>
             <th class="text-right">Price</th>
@@ -21,26 +23,29 @@
         @foreach (var item in Model.ShoppingCart.ShoppingCartItems)
         {
 
-            <tr>
-                <td class="text-center">@item.Count</td>
+        <tr>
+            <td>
+                <img src="~/images/@item.Package.Pic" class="rounded-circle" width="90" height="80" asp-append-version="true" />
+            </td>
+            <td class="text-center">@item.Count</td>
 
-                <td class="text-left">@item.Package.PackageNameId</td>
-                <td class="text-right">@item.Package.PackagePrice.ToString("c")</td>
-                <td class="text-right">
-                    @((item.Count * item.Package.PackagePrice).ToString("c"))
-                </td>
-                <td>
-                    <p class="button">
-                        <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="RemoveFromShoppingCart"
-                           asp-route-PackageId="@item.Package.PackageId">Remove From Cart</a>
-                    </p>
-                </td>
-            </tr>
+            <td class="text-left">@item.Package.PackageNameId</td>
+            <td class="text-right">@item.Package.PackagePrice.ToString("c")</td>
+            <td class="text-right">
+                @((item.Count * item.Package.PackagePrice).ToString("c"))
+            </td>
+            <td>
+                <p class="button">
+                    <a class="btn btn-primary" asp-controller="ShoppingCart" asp-action="RemoveFromShoppingCart"
+                       asp-route-PackageId="@item.Package.PackageId">Remove From Cart</a>
+                </p>
+            </td>
+        </tr>
         }
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="3" class="text-right">Total:</td>
+            <td colspan="4" class="text-right">Total:</td>
             <td class="text-right">
                 @Model.CartTotal.ToString("c")
             </td>

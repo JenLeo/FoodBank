@@ -4,14 +4,16 @@ using ID;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211119085107_top")]
+    partial class top
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,6 +41,27 @@ namespace ID.Migrations
                     b.HasIndex("PackageId");
 
                     b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("ID.Models.CartOrder", b =>
+                {
+                    b.Property<string>("CartId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrderId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CartOrderId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartId", "OrderId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("CartOrders");
                 });
 
             modelBuilder.Entity("ID.Models.Order", b =>
@@ -117,9 +140,6 @@ namespace ID.Migrations
 
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("OrderStatus")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PackageId")
                         .HasColumnType("nvarchar(450)");
@@ -432,6 +452,25 @@ namespace ID.Migrations
                     b.Navigation("Package");
                 });
 
+            modelBuilder.Entity("ID.Models.CartOrder", b =>
+                {
+                    b.HasOne("ID.Models.Cart", "Cart")
+                        .WithMany("CartOrder")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ID.Models.Order", "Order")
+                        .WithMany("CartOrders")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("ID.Models.Order", b =>
                 {
                     b.HasOne("ID.Models.Cart", "Cart")
@@ -454,7 +493,7 @@ namespace ID.Migrations
                         .HasForeignKey("OrderId");
 
                     b.HasOne("ID.Models.Package", "Packages")
-                        .WithMany("OrderDetails")
+                        .WithMany()
                         .HasForeignKey("PackageId");
 
                     b.Navigation("Order");
@@ -524,22 +563,21 @@ namespace ID.Migrations
 
             modelBuilder.Entity("ID.Models.Cart", b =>
                 {
+                    b.Navigation("CartOrder");
+
                     b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ID.Models.Order", b =>
                 {
+                    b.Navigation("CartOrders");
+
                     b.Navigation("OrderLines");
                 });
 
             modelBuilder.Entity("ID.Models.Organisation", b =>
                 {
                     b.Navigation("Orders");
-                });
-
-            modelBuilder.Entity("ID.Models.Package", b =>
-                {
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("ID.Models.Supplier", b =>

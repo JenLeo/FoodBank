@@ -11,7 +11,7 @@ namespace ID.Models
 {
     public class PackageViewModel
     {
-        [Display(Name = "Package Id: ")] 
+        [Display(Name = "Package ID: ")] 
         public string PackageId { get; set; }
 
         [Display(Name = "Package Name: ")]
@@ -36,14 +36,14 @@ namespace ID.Models
         [Display(Name = "Price: ")]
         public decimal PackagePrice { get; set; }
 
-        [Display(Name = "Supplier ")]
+        [Display(Name = "Supplier: ")]
         public string SupplierId { get; set; }
 
-        //public List<SelectListItem> Suppliers { get; set; }
         public IEnumerable<Package> Packages { get; set; }
-        public IEnumerable<Supplier> Suppliers { get; set; }
-        //public Supplier Supplier { get; set; }
 
+        [Display(Name = "Supplier: ")]
+        public IEnumerable<Supplier> Suppliers { get; set; }
+       
         [Display(Name = " ")]
         public IFormFile Pic { get; set; }
 

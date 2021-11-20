@@ -23,14 +23,15 @@ namespace ID
 
 
         public DbSet<Supplier> Suppliers { get; set; }
-        public DbSet<PackageNav> PackageNavs { get; set; }
+
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Package> Packages { get; set; }
-
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Volunteers> Volunteer { get; set; }
+        //public DbSet<CartOrder> CartOrders { get; set; }
+      
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Cart>().ToTable("Carts");
@@ -40,15 +41,18 @@ namespace ID
             builder.Entity<Order>().ToTable("Orders");
             builder.Entity<OrderDetail>().ToTable("OrderDetails");
             builder.Entity<Organisation>().ToTable("Organisations");
-            builder.Entity<PackageNav>().ToTable("PackageNavs");
+
+
+            //builder.Entity<CartOrder>().ToTable("CartOrders");
+
             base.OnModelCreating(builder);
 
-            builder.Entity<PackageNav>()
-                .HasKey(p => new
-                {
-                    p.PackageId,
-                    p.SupplierId
-                });
+            //builder.Entity<CartOrder>()
+            //     .HasKey(c => new
+            //     {
+            //         c.CartId,
+            //         c.OrderId
+            //     });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

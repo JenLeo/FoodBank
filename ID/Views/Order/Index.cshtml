@@ -23,12 +23,15 @@
             <th>
                 Last Name
             </th>
-            <th>
+            @*<th>
                 Address
-            </th>
+            </th>*@
             <th>
                 Date Ordered
             </th>
+            @*<th>
+                Package
+            </th>*@
             <th>
                 Deliver To
             </th>
@@ -50,13 +53,16 @@
             <td>
                 @Html.DisplayFor(modelItem => ord.LastName)
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => ord.AddressLine1)
-            </td>
+            </td>*@
 
             <td>
                 @Html.DisplayFor(modelItem => ord.OrderDate)
             </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => ord.Cart.Package.PackageNameId)
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => ord.Organisation.OrganisationName)
             </td>

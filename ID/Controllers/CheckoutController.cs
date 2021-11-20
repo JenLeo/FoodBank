@@ -16,42 +16,41 @@ namespace ID.Controllers
         private readonly AppDbContext _context;
 
         public CheckoutController(IOrderRepository orderRepository, ShoppingCart shoppingCart, AppDbContext context)
-{
-    _orderRepository = orderRepository;
-    _shoppingCart = shoppingCart;
+        {
+            _orderRepository = orderRepository;
+            _shoppingCart = shoppingCart;
             _context = context;
-}
+        }
 
 
-public IActionResult CheckOut()
-{
+        public IActionResult CheckOut()
+        {
             PopulateOrganisationsDropDownList();
             return View();
-}
-
-//[Authorize]
-[HttpPost]
-//[Authorize(Policy = "MinimumOrderAge")]
-public IActionResult CheckOut(Order order)
-{
-    var items = _shoppingCart.GetShoppingCartItems();
-
-    if (_shoppingCart.ShoppingCartItems.Count == 0)
-    {
-        ModelState.AddModelError("", "Your cart is empty");
-    }
-
-    if (ModelState.IsValid)
-    {
-        _orderRepository.CreateOrder(order);
-        _shoppingCart.ClearCart();
-        return RedirectToAction("CheckoutComplete");
-    }
-    return View(order);
+        }
 
 
+        [HttpPost]
+        public IActionResult CheckOut(Order order)
+        {
+            var items = _shoppingCart.GetShoppingCartItems();
 
-}
+            if (_shoppingCart.ShoppingCartItems.Count == 0)
+            {
+                ModelState.AddModelError("", "Your cart is empty");
+            }
+
+            if (ModelState.IsValid)
+            {
+                _orderRepository.CreateOrder(order);
+                _shoppingCart.ClearCart();
+                return RedirectToAction("CheckoutComplete");
+            }
+            return View(order);
+
+
+
+        }
         private void PopulateOrganisationsDropDownList(object selectedOrganisation = null)
         {
             var organisationsQuery = from d in _context.Organisations
@@ -60,21 +59,21 @@ public IActionResult CheckOut(Order order)
             ViewBag.OrganisationId = new SelectList(organisationsQuery.AsNoTracking(), "OrganisationId", "OrganisationName", selectedOrganisation);
         }
         public IActionResult CheckoutComplete()
-{
-    if (!string.IsNullOrEmpty(HttpContext.User.Identity.Name))
-    {
-        ViewBag.CheckoutCompleteMessage = HttpContext.User.Identity.Name +
-                                          ", thanks for your order!";
-    }
-    else
-    {
-        ViewBag.CheckoutCompleteMessage = "Thanks for your order!";
-    }
+        {
+            if (!string.IsNullOrEmpty(HttpContext.User.Identity.Name))
+            {
+                ViewBag.CheckoutCompleteMessage = HttpContext.User.Identity.Name +
+                                                  ", thanks you for your order!";
+            }
+            else
+            {
+                ViewBag.CheckoutCompleteMessage = "Thank you for your order!";
+            }
 
 
-    return View();
+            return View();
 
-}
+        }
     }
 }
    

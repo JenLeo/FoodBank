@@ -24,11 +24,16 @@ namespace ID.Controllers
     {
         private readonly IPackageRepository _packageRepository;
         private readonly ShoppingCart _shoppingCart;
+        private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment webHostEnv;
 
-        public ShoppingCartController(IPackageRepository iPackageRepository, ShoppingCart shoppingCart)
+        public ShoppingCartController(IPackageRepository iPackageRepository, ShoppingCart shoppingCart, AppDbContext Context,
+            Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnv)
         {
             _packageRepository = iPackageRepository;
             _shoppingCart = shoppingCart;
+            _context = Context;
+            this.webHostEnv = webHostEnv;
         }
 
 
@@ -52,7 +57,7 @@ namespace ID.Controllers
         public IActionResult AddToShoppingCart(string PackageId)
         {
             var selectedPackage = _packageRepository.GetPackage().FirstOrDefault(p => p.PackageId == PackageId);
-            
+
 
             if (selectedPackage != null)
             {
@@ -61,7 +66,7 @@ namespace ID.Controllers
 
             }
 
-            
+
             return RedirectToAction("Index");
         }
 

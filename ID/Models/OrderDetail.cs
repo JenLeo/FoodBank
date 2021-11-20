@@ -3,7 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ID.Models
 {
-    
+    public enum OrderStatusOptions
+    {
+        Pending,
+        Accepted,
+        Cancelled,
+        Completed
+    }
     public class OrderDetail
     {
         
@@ -17,6 +23,11 @@ namespace ID.Models
 
         [Column(TypeName = "decimal(18,4)")]
         public decimal UnitPrice { get; set; }
+
+        [Display(Name = "Status: ")]
+        [DisplayFormat(NullDisplayText = "Pending")]
+        public string OrderStatus { get; set; }
+
         public virtual Package Packages { get; set; }
         public virtual Order Order { get; set; }
     }

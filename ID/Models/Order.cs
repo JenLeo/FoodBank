@@ -17,26 +17,26 @@ namespace ID.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Display(Name = "Order Id")]
+        [Display(Name = "Order ID: ")]
         public string OrderId { get; set; }
         public List<OrderDetail> OrderLines { get; set; }
 
         [Required(ErrorMessage = "Please enter your first name")]
-        [Display(Name = "First name")]
+        [Display(Name = "First name: ")]
         [StringLength(50)]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Please enter your last name")]
-        [Display(Name = "Last name")]
+        [Display(Name = "Last name: ")]
         [StringLength(50)]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Please enter your address")]
         [StringLength(100)]
-        [Display(Name = "Address ")]
+        [Display(Name = "Address: ")]
         public string AddressLine1 { get; set; }
 
-        [Display(Name = "Address Line 2")]
+        [Display(Name = "Address Line 2: ")]
         public string AddressLine2 { get; set; }
 
         [Required(ErrorMessage = "Please enter your city")]
@@ -50,7 +50,7 @@ namespace ID.Models
         [Required(ErrorMessage = "Please enter your phone number")]
         [StringLength(25)]
         [DataType(DataType.PhoneNumber)]
-        [Display(Name = "Phone number")]
+        [Display(Name = "Phone number: ")]
         public string PhoneNumber { get; set; }
 
         [Required]
@@ -64,27 +64,35 @@ namespace ID.Models
         [ScaffoldColumn(false)]
         public decimal Total { get; set; }
 
-        [Display(Name = "Order Date ")]
+        [Display(Name = "Order Date: ")]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
         [ScaffoldColumn(false)]
         public DateTime OrderDate { get; set; }
 
-        [Display(Name = "Status")]
+        [Display(Name = "Status: ")]
         [DisplayFormat(NullDisplayText = "Pending")]
         public string OrderStatus { get; set; }
 
         [ForeignKey("Organisation ")]
-        [Display(Name = "Organisation ")]
+        [Display(Name = "Organisation: ")]
         public string OrganisationId { get; set; }
         public Organisation Organisation { get; set; }
-       
+
+        [ForeignKey("Cart")]
+        [Display(Name = "Cart: ")]
+        public string CartId { get; set; }
+        public Cart Cart { get; set; }
+        //public Cart Cart { get; set; }
+
+        //public ICollection<CartOrder> CartOrders { get; set; }
+
     }
- 
-    public enum OrderStatusOptions
-    {
-        Pending,
-        Accepted,
-        Cancelled,
-        Completed
-    }
+
+    //public enum OrderStatusOptions
+    //{
+    //    Pending,
+    //    Accepted,
+    //    Cancelled,
+    //    Completed
+    //}
 }

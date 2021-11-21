@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211119101644_order")]
-    partial class order
+    [Migration("20211120221430_status")]
+    partial class status
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -119,6 +119,9 @@ namespace ID.Migrations
 
                     b.Property<string>("OrderId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("OrderStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PackageId")
                         .HasColumnType("nvarchar(450)");
@@ -453,7 +456,7 @@ namespace ID.Migrations
                         .HasForeignKey("OrderId");
 
                     b.HasOne("ID.Models.Package", "Packages")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("PackageId");
 
                     b.Navigation("Order");
@@ -534,6 +537,11 @@ namespace ID.Migrations
             modelBuilder.Entity("ID.Models.Organisation", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("ID.Models.Package", b =>
+                {
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("ID.Models.Supplier", b =>

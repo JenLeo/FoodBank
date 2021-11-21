@@ -6,18 +6,12 @@ namespace ID.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "OrderStatus",
-                table: "OrderDetails",
-                type: "nvarchar(max)",
-                nullable: true);
+
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "OrderStatus",
-                table: "OrderDetails");
+
         }
     }
 }

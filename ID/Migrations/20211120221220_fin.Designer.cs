@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ID.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211120194526_status")]
-    partial class status
+    [Migration("20211120221220_fin")]
+    partial class fin
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

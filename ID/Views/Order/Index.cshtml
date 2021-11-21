@@ -26,18 +26,18 @@
             @*<th>
                 Address
             </th>*@
-            <th>
-                Date Ordered
-            </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Date Ordered</a>
+        </th>
             @*<th>
                 Package
             </th>*@
-            <th>
-                Deliver To
-            </th>
-            <th>
-                Status
-            </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["OrganisationSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Deliver To</a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Status</a>
+        </th>
 
             <th></th>
         </tr>

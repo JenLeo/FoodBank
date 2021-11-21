@@ -32,8 +32,8 @@ namespace ID.Controllers
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["StatusSortParm"] = String.IsNullOrEmpty(sortOrder) ? "status_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "OrderDate";
-            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "OrganisationName"; ;
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["OrganisationSortParm"] = sortOrder == "Organisation" ? "organisation_desc" : "Organisation"; 
 
             if (searchString != null)
             {
@@ -46,12 +46,11 @@ namespace ID.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var ord = _context.Orders
+            var ord = from o in _context.Orders
        .Include(o => o.Organisation)
        .Include(c => c.Cart)
-       //.ThenInclude(p => p.Package)
-
-       .AsNoTracking();
+       .AsNoTracking()
+       select o;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -75,22 +74,22 @@ namespace ID.Controllers
             switch (sortOrder)
             {
                 case "status_desc":
-                    ord.OrderByDescending(o => o.OrderStatus);
+                    ord = ord.OrderByDescending(o => o.OrderStatus);
                     break;
                 case "Date":
-                    ord.OrderBy(o => o.OrderDate);
+                    ord = ord.OrderBy(o => o.OrderDate);
                     break;
                 case "date_desc":
-                    ord.OrderByDescending(o => o.OrderDate);
+                    ord = ord.OrderByDescending(o => o.OrderDate);
                     break;
-                case "Name":
-                    ord.OrderBy(o => o.Organisation.OrganisationName);
+                case "Organisation":
+                    ord = ord.OrderBy(o => o.Organisation.OrganisationName);
                     break;
-                case "name_desc":
-                    ord.OrderByDescending(o => o.Organisation.OrganisationName);
+                case "organisation_desc":
+                    ord = ord.OrderByDescending(o => o.Organisation.OrganisationName);
                     break;
                 default:
-                    ord.OrderBy(o => o.OrderStatus);
+                    ord = ord.OrderBy(o => o.OrderStatus);
                     break;
             }
 

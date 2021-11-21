@@ -46,8 +46,8 @@ namespace ID.Controllers
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "PackageType";
-            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "PackagePrice";
+            ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "Type";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
 
             if (searchString != null)
             {
@@ -60,9 +60,10 @@ namespace ID.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var pks = _context.Packages
+            var pks = from p in _context.Packages
        .Include(c => c.Supplier)
-       .AsNoTracking();
+       .AsNoTracking()
+                      select p; 
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -73,22 +74,22 @@ namespace ID.Controllers
             switch (sortOrder)
             {
                 case "name_desc":
-                    pks.OrderByDescending(p => p.PackageNameId);
+                    pks = pks.OrderByDescending(p => p.PackageNameId);
                     break;
                 case "Type":
-                    pks.OrderBy(p => p.PackageType);
+                    pks = pks.OrderBy(p => p.PackageType);
                     break;
                 case "type_desc":
-                    pks.OrderByDescending(p => p.PackageType);
+                    pks = pks.OrderByDescending(p => p.PackageType);
                     break;
                 case "Price":
-                    pks.OrderBy(p => p.PackagePrice);
+                   pks = pks.OrderBy(p => p.PackagePrice);
                     break;
                 case "price_desc":
-                    pks.OrderByDescending(p => p.PackagePrice);
+                   pks =  pks.OrderByDescending(p => p.PackagePrice);
                     break;
                 default:
-                    pks.OrderBy(p => p.PackageNameId);
+                    pks = pks.OrderBy(p => p.PackageNameId);
                     break;
             }
 

@@ -23,15 +23,10 @@
             <th>
                 Last Name
             </th>
-            @*<th>
-                Address
-            </th>*@
+    
         <th>
             <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Date Ordered</a>
         </th>
-            @*<th>
-                Package
-            </th>*@
         <th>
             <a asp-action="Index" asp-route-sortOrder="@ViewData["OrganisationSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Deliver To</a>
         </th>
@@ -53,16 +48,11 @@
             <td>
                 @Html.DisplayFor(modelItem => ord.LastName)
             </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => ord.AddressLine1)
-            </td>*@
 
             <td>
                 @Html.DisplayFor(modelItem => ord.OrderDate)
             </td>
-            @*<td>
-                @Html.DisplayFor(modelItem => ord.Cart.Package.PackageNameId)
-            </td>*@
+
             <td>
                 @Html.DisplayFor(modelItem => ord.Organisation.OrganisationName)
             </td>

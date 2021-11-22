@@ -30,6 +30,8 @@ namespace ID.Models
 
         public string ShoppingCartId { get; set; }
 
+        public const string CartSessionKey = "scartId";
+
         public List<Cart> ShoppingCartItems { get; set; }
 
 
@@ -46,93 +48,102 @@ namespace ID.Models
 
             return new ShoppingCart(context) { ShoppingCartId = scartId };
         }
- 
-public void AddToCart(Package package, int count)
-{
-    var shoppingCartItem =
-        _appDbContext.Carts.SingleOrDefault(
-            s => s.Package.PackageId == package.PackageId && s.ShoppingCartId == ShoppingCartId);
 
-    if (shoppingCartItem == null)
-    {
-        shoppingCartItem = new Cart
+        public void AddToCart(Package package, int count)
         {
-            ShoppingCartId = ShoppingCartId,
-            PackageId = package.PackageId,
-            Count = 1
-        };
+            var shoppingCartItem =
+                _appDbContext.Carts.SingleOrDefault(
+                    s => s.Package.PackageId == package.PackageId && s.ShoppingCartId == ShoppingCartId);
 
-        _appDbContext.Carts.Add(shoppingCartItem);
-    }
-    else
-    {
-        shoppingCartItem.Count++;
-    }
-    _appDbContext.SaveChanges();
-}
+            if (shoppingCartItem == null)
+            {
+                shoppingCartItem = new Cart
+                {
+                    ShoppingCartId = ShoppingCartId,
+                    PackageId = package.PackageId,
+                    Count = 1
+                };
 
-public int RemoveFromCart(Package Package)
-{
-    var shoppingCartItem =
-        _appDbContext.Carts.SingleOrDefault(
-            s => s.Package.PackageId == Package.PackageId && s.ShoppingCartId == ShoppingCartId);
-
-    var localAmount = 0;
-
-    if (shoppingCartItem != null)
-    {
-        if (shoppingCartItem.Count > 1)
-        {
-            shoppingCartItem.Count--;
-            localAmount = shoppingCartItem.Count;
+                _appDbContext.Carts.Add(shoppingCartItem);
+            }
+            else
+            {
+                shoppingCartItem.Count++;
+            }
+            _appDbContext.SaveChanges();
         }
-        else
+
+        public int RemoveFromCart(Package Package)
         {
-            _appDbContext.Carts.Remove(shoppingCartItem);
+            var shoppingCartItem =
+                _appDbContext.Carts.SingleOrDefault(
+                    s => s.Package.PackageId == Package.PackageId && s.ShoppingCartId == ShoppingCartId);
+
+            var localAmount = 0;
+
+            if (shoppingCartItem != null)
+            {
+                if (shoppingCartItem.Count > 1)
+                {
+                    shoppingCartItem.Count--;
+                    localAmount = shoppingCartItem.Count;
+                }
+                else
+                {
+                    _appDbContext.Carts.Remove(shoppingCartItem);
+                }
+            }
+
+            _appDbContext.SaveChanges();
+
+            return localAmount;
+        }
+
+        public List<Cart> GetShoppingCartItems()
+        {
+
+            return ShoppingCartItems ??
+                (ShoppingCartItems =
+             _appDbContext.Carts.Where(
+            cart => cart.ShoppingCartId == ShoppingCartId)
+                .Include(c => c.Package)
+                .ToList());
+
+
+        }
+
+        public void ClearCart()
+        {
+            var cartItems = _appDbContext
+                .Carts
+                .Where(cart => cart.ShoppingCartId == ShoppingCartId);
+
+            _appDbContext.Carts.RemoveRange(cartItems);
+
+            _appDbContext.SaveChanges();
+        }
+
+
+
+        public decimal GetShoppingCartTotal()
+        {
+            var total = _appDbContext.Carts.Where(c => c.
+            ShoppingCartId == ShoppingCartId)
+                .Select(c => c.Package.PackagePrice * c.Count).Sum();
+            return total;
+
+
+        }
+        public void MigrateCart(string userName)
+        {
+            var shoppingCart = _appDbContext.Carts.Where(
+                c => c.CartId == ShoppingCartId);
+
+            foreach (Cart item in shoppingCart)
+            {
+                item.CartId = userName;
+            }
+            _appDbContext.SaveChanges();
         }
     }
-
-    _appDbContext.SaveChanges();
-
-    return localAmount;
 }
-
-public List<Cart> GetShoppingCartItems()
-{
-
-    return ShoppingCartItems ??
-        (ShoppingCartItems =
-     _appDbContext.Carts.Where(
-    cart => cart.ShoppingCartId == ShoppingCartId)
-        .Include(c => c.Package)
-        .ToList());
-
-
-}
-
-public void ClearCart()
-{
-    var cartItems = _appDbContext
-        .Carts
-        .Where(cart => cart.ShoppingCartId == ShoppingCartId);
-
-    _appDbContext.Carts.RemoveRange(cartItems);
-
-    _appDbContext.SaveChanges();
-}
-
-
-
-public decimal GetShoppingCartTotal()
-{
-    var total = _appDbContext.Carts.Where(c => c.
-    ShoppingCartId == ShoppingCartId)
-        .Select(c => c.Package.PackagePrice * c.Count).Sum();
-    return total;
-
-
-}
-
-    }
-}
-   

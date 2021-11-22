@@ -31,15 +31,94 @@ namespace ID.Controllers
             this.webHostEnv = webHostEnv;
         }
 
-        public async Task <IActionResult> Index()
+        public async Task <IActionResult> Index(string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {
-            var orderdetails = _context.OrderDetails
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["StatusSortParm"] = String.IsNullOrEmpty(sortOrder) ? "status_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewData["SupplierSortParm"] = sortOrder == "Supplier" ? "supplier_desc" : "Supplier";
+            ViewData["SupplierAddressSortParm"] = sortOrder == "SupplierAddress" ? "supplier_address_desc" : "SupplierAddress";
+            ViewData["OrganisationSortParm"] = sortOrder == "Organisation" ? "organisation_desc" : "Organisation";
+            ViewData["OrganisationAddressSortParm"] = sortOrder == "OrganisationAddress" ? "organisation_address_desc" : "OrganisationAddress";
+            
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var orderdetails = from o in _context.OrderDetails
        .Include(c => c.Order)
-       .ThenInclude(o => o.Organisation)
+       .ThenInclude(r => r.Organisation)
        .Include(p => p.Packages)
        .ThenInclude(s => s.Supplier)
-       .AsNoTracking();
-            return View(await orderdetails.ToListAsync());
+       .AsNoTracking()
+       select o;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                orderdetails = orderdetails.Where(o =>
+                o.Packages.Supplier.SupplierName.Contains(searchString) ||
+                o.Packages.Supplier.SupplierAddress.Contains(searchString) ||
+                o.Order.Organisation.OrganisationName.Contains(searchString) ||
+                o.Order.Organisation.OrganisationAddress.ToString().Contains(searchString) ||
+                o.OrderStatus.Contains(searchString)
+
+                );
+            }
+            
+
+            switch (sortOrder)
+            {
+                case "status_desc":
+                    orderdetails = orderdetails.OrderByDescending(o => o.OrderStatus);
+                    break;
+                case "Date":
+                    orderdetails = orderdetails.OrderBy(o => o.Order.OrderDate);
+                    break;
+                case "date_desc":
+                    orderdetails = orderdetails.OrderByDescending(o => o.Order.OrderDate);
+                    break;
+                case "Supplier":
+                    orderdetails = orderdetails.OrderBy(o => o.Packages.Supplier.SupplierName);
+                    break;
+                case "supplier_desc":
+                    orderdetails = orderdetails.OrderByDescending(o => o.Packages.Supplier.SupplierName);
+                    break;
+                case "SupplierAddress":
+                    orderdetails = orderdetails.OrderBy(o => o.Packages.Supplier.SupplierAddress);
+                    break;
+                case "supplier_address_desc":
+                    orderdetails = orderdetails.OrderByDescending(o => o.Packages.Supplier.SupplierAddress);
+                    break;
+                case "Organisation":
+                    orderdetails = orderdetails.OrderBy(o => o.Order.Organisation.OrganisationName);
+                    break;
+                case "organisation_desc":
+                    orderdetails = orderdetails.OrderByDescending(o => o.Order.Organisation.OrganisationName);
+                    break;
+                case "OrganisationAddress":
+                    orderdetails = orderdetails.OrderBy(o => o.Order.Organisation.OrganisationAddress);
+                    break;
+                case "organisation_address_desc":
+                    orderdetails = orderdetails.OrderByDescending(o => o.Order.Organisation.OrganisationAddress);
+                    break;
+                default:
+                    orderdetails = orderdetails.OrderBy(o => o.OrderStatus);
+                    break;
+            }
+
+            int pageSize = 5;
+
+            return View(await PaginatedList<OrderDetail>.CreateAsync(orderdetails.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+          
             
         }
 
@@ -83,7 +162,7 @@ namespace ID.Controllers
             return View(_or);
         }
 
-        // POST: Package/Edit/5
+        // POST: Jobs/Edit/5
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
@@ -121,7 +200,7 @@ namespace ID.Controllers
         }
       
 
-        // GET: OrderDetailController/Delete/5
+        // GET: JobsController/Delete/5
 
         public async Task<IActionResult> Delete(string id)
         {
@@ -142,7 +221,7 @@ namespace ID.Controllers
 
         }
 
-        // POST: OrderDetailController/Delete/5
+        // POST: JobsController/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string Id)

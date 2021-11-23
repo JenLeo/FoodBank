@@ -37,7 +37,7 @@ namespace ID.Controllers
         }
 
 
-        public IActionResult Index()
+        public IActionResult Index(ShoppingCartViewModel viewModel)
         {
 
 

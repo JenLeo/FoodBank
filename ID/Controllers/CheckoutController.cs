@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using iD.Models;
 using System.Collections.Generic;
 
 namespace ID.Controllers
@@ -16,52 +15,17 @@ namespace ID.Controllers
 
         private readonly ShoppingCart _shoppingCart;
         private readonly AppDbContext _context;
-        private readonly IDeliverContext _deliverContext;
+   
 
         public CheckoutController(IOrderRepository orderRepository, 
-            ShoppingCart shoppingCart, AppDbContext context,
-            IDeliverContext deliverContext)
+            ShoppingCart shoppingCart, AppDbContext context
+          )
         {
             _orderRepository = orderRepository;
             _shoppingCart = shoppingCart;
             _context = context;
-            _deliverContext = deliverContext;
         }
-        private List<Delivery> GetDeliveries()
-        {
-            return new List<Delivery>()
-    {
-        new Delivery()
-        {
-            Id = 1,
-            Name="(€0.00)"
-        },
-        new Delivery() {
-            Id = 2,
-            Name="Donate (€1.00)"
-        },
-        new Delivery() {
-            Id = 3,
-            Name="Donate (€5.00)"
-        },
-         new Delivery() {
-            Id = 4,
-            Name="Donate (€10.00)"
-        },
-           new Delivery() {
-            Id = 5,
-            Name="Donate (€15.00)"
-        },
-             new Delivery() {
-            Id = 6,
-            Name="Donate (€25.00)"
-        },
-               new Delivery() {
-            Id = 7,
-            Name="Donate (€50.00)"
-        },
-    };
-        }
+     
 
         public IActionResult CheckOut()
         {

@@ -24,20 +24,17 @@ namespace ID.Controllers
     public class PackageController : Controller
     {
         private readonly IPackageRepository _PackageRepository;
-        private readonly ISupplierRepository _supplierRepository;
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment webHostEnv;
 
       
         public PackageController(
             IPackageRepository packageRepository,
-            ISupplierRepository supplierRepository,
         AppDbContext Context,
             Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnv
          )
         {
             _PackageRepository = packageRepository;
-            _supplierRepository = supplierRepository;
             _context = Context;
             this.webHostEnv = webHostEnv;
         }

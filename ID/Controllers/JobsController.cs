@@ -210,6 +210,10 @@ namespace ID.Controllers
             }
 
             var _order = await _context.OrderDetails
+                .Include(c => c.Order)
+       .ThenInclude(o => o.Organisation)
+       .Include(p => p.Packages)
+       .ThenInclude(s => s.Supplier)
                     .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.OrderDetailId == id);
             if (_order == null)

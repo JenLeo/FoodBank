@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Moq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -13,31 +15,65 @@ namespace IDTest
 {
     public class PackageControllerTest
     {
-        private readonly Mock<IPackageRepository> _mockRepo;
+        private readonly Mock<IPackageRepository> service;
         private readonly Mock<AppDbContext> _mockContext;
         private readonly Mock<IWebHostEnvironment> _mockHost;
-        private readonly PackageController _controller;
-
         public PackageControllerTest()
         {
-            _mockRepo = new Mock<IPackageRepository>();
-            //_mockContext = new Mock<AppDbContext>();
-            //_mockHost = new Mock<IWebHostEnvironment>();
-            _controller = new PackageController(_mockRepo.Object, _mockContext.Object, _mockHost.Object);
+            service = new Mock<IPackageRepository>();
         }
+
         [Fact]
-        public async Task Index_ReturnsView_ListOfPackages()
+        //naming convention MethodName_expectedBehavior_StateUnderTest
+        public void GetPackage_ListOfPackage_PackageExistsInRepo()
         {
-            
+            //arrange
+            var package = GetSamplePackage();
+            service.Setup(x => x.GetPackage())
+                .Returns(GetSamplePackage);
+            var controller = new PackageController(service.Object, _mockContext.Object, _mockHost.Object);
 
+            //act
+            var actionResult = controller.Index(searchString: null, sortOrder: null, currentFilter: null,
+                pageNumber: null);
+            var result = actionResult.Result as OkObjectResult;
+            var actual = result.Value as IEnumerable<Package>;
 
+            //assert
+            Assert.IsType<OkObjectResult>(result);
+            Assert.Equal(GetSamplePackage().Count(), actual.Count());
         }
-        [Fact]
-        public void Create_ActionExecutes_ReturnsViewForCreate()
+
+        private List<Package> GetSamplePackage()
         {
-            var result = _controller.Create();
+            List<Package> output = new List<Package>
+        {
+            new Package
+                    {
+                        PackageId = Guid.NewGuid().ToString(),
+                        PackageNameId = "Fruit Frenzy",
+                        PackageDetail = "Description",
+                        PackageType = "Perishable",
+                        PackagePrice = 7,
+                        Pic = "",
+                        SupplierId = "1234"
 
-            Assert.IsType<View>(result);
+                    },
+
+                    new Package
+                    {
+                        PackageId = Guid.NewGuid().ToString(),
+                        PackageNameId = "Fruit Frenzy",
+                        PackageDetail = "Description",
+                        PackageType = "Perishable",
+                        PackagePrice = 7,
+                        Pic = "",
+                        SupplierId = "1234"
+                    }
+        };
+            return output;
         }
+        
+
     }
 }

@@ -26,7 +26,7 @@ namespace ID.Controllers
         private readonly IPackageRepository _PackageRepository;
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment webHostEnv;
-        private IPackageRepository @object;
+        
 
         public PackageController(
             IPackageRepository packageRepository,

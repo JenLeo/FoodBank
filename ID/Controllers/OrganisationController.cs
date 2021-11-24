@@ -41,20 +41,16 @@ namespace ID.Controllers
             return View(items);
         }
        
-        public async Task<IActionResult> Index(string searchString, string searchLocation)
+        public async Task<IActionResult> Index(string searchString)
         {
             var org = from o in _context.Organisations
                       select o;
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                org = org.Where(s => s.OrganisationName.Contains(searchString));
+                org = org.Where(s => s.OrganisationName.Contains(searchString) || s.OrganisationAddress.Contains(searchString));
             }
-            if (!String.IsNullOrEmpty(searchLocation))
-            {
-                org = org.Where(s => s.OrganisationAddress.Contains(searchLocation));
-            }
-
+          
             return View(await org.ToListAsync());
         }
         // GET: OrganisationController/Details/5

@@ -37,7 +37,7 @@ namespace ID.Controllers
         [HttpPost]
         public IActionResult CheckOut(Order order)
         {
-            var items = _shoppingCart.GetShoppingCartItems();
+            _ = _shoppingCart.GetShoppingCartItems();
 
             if (_shoppingCart.ShoppingCartItems.Count == 0)
             {

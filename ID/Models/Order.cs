@@ -82,17 +82,7 @@ namespace ID.Models
         [Display(Name = "Cart: ")]
         public string CartId { get; set; }
         public Cart Cart { get; set; }
-        //public Cart Cart { get; set; }
-
-        //public ICollection<CartOrder> CartOrders { get; set; }
+        
 
     }
-
-    //public enum OrderStatusOptions
-    //{
-    //    Pending,
-    //    Accepted,
-    //    Cancelled,
-    //    Completed
-    //}
 }

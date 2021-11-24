@@ -41,19 +41,17 @@ namespace ID.Controllers
             return View(items);
         }
 
-        public async Task<IActionResult> Index(string searchString, string searchLocation)
+        public async Task<IActionResult> Index(string searchString)
         {
             var sp = from s in _context.Suppliers
                      select s;
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                sp = sp.Where(s => s.SupplierName.Contains(searchString));
+                sp = sp.Where(s => s.SupplierName.Contains(searchString) ||
+                s.SupplierAddress.Contains(searchString));
             }
-            if (!String.IsNullOrEmpty(searchLocation))
-            {
-                sp = sp.Where(s => s.SupplierAddress.Contains(searchLocation));
-            }
+            
             return View(await sp.ToListAsync());
         }
         // GET: SupplierController/Details/5

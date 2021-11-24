@@ -22,10 +22,11 @@ namespace ID.Controllers
 
         public IActionResult Index()
         {
-            var cart = new ShoppingCartViewModel();
-            ////set value into session key
+            _= new ShoppingCartViewModel();
 
-            HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
+            ////set value into session key
+            //HttpContext.Session.SetString("cart", JsonConvert.SerializeObject(cart));
+
             return View();
         }
 

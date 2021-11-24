@@ -166,7 +166,9 @@ namespace ID.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+#pragma warning disable CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         public async Task<IActionResult> EditPost(string? id)
+#pragma warning restore CS8632 // The annotation for nullable reference types should only be used in code within a '#nullable' annotations context.
         {
             if (id == null)
             {
@@ -198,11 +200,13 @@ namespace ID.Controllers
             return View(orderDetailToUpdate
                 );
         }
-      
+
 
         // GET: JobsController/Delete/5
 
+#pragma warning disable S4144 // Methods should not have identical implementations
         public async Task<IActionResult> Delete(string id)
+#pragma warning restore S4144 // Methods should not have identical implementations
         {
             if (id == null)
             {

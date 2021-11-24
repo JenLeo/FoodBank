@@ -39,9 +39,7 @@ namespace ID.Controllers
 
         public IActionResult Index(ShoppingCartViewModel viewModel)
         {
-
-
-            var items = _shoppingCart.GetShoppingCartItems();
+            _ = _shoppingCart.GetShoppingCartItems();
 
 
             var shoppingCartViewModel = new ShoppingCartViewModel
@@ -50,7 +48,7 @@ namespace ID.Controllers
                 CartTotal = _shoppingCart.GetShoppingCartTotal()
             };
 
-            var cart = JsonConvert.DeserializeObject<ShoppingCartViewModel>(HttpContext.Session.GetString("cart"));
+            //var cart = JsonConvert.DeserializeObject<ShoppingCartViewModel>(HttpContext.Session.GetString("ShoppingCartId"));
             return View(shoppingCartViewModel);
         }
 

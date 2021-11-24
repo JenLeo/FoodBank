@@ -26,8 +26,8 @@ namespace ID.Controllers
         private readonly IPackageRepository _PackageRepository;
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment webHostEnv;
+        private IPackageRepository @object;
 
-      
         public PackageController(
             IPackageRepository packageRepository,
         AppDbContext Context,
@@ -38,6 +38,7 @@ namespace ID.Controllers
             _context = Context;
             this.webHostEnv = webHostEnv;
         }
+
 
         public async Task<IActionResult> Index(string searchString, string sortOrder, string currentFilter, int? pageNumber)
         {

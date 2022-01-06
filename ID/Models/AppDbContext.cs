@@ -30,7 +30,7 @@ namespace ID
         public DbSet<Package> Packages { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
         public DbSet<Volunteers> Volunteer { get; set; }
-        //public DbSet<CartOrder> CartOrders { get; set; }
+        
       
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -43,16 +43,9 @@ namespace ID
             builder.Entity<Organisation>().ToTable("Organisations");
 
 
-            //builder.Entity<CartOrder>().ToTable("CartOrders");
 
             base.OnModelCreating(builder);
 
-            //builder.Entity<CartOrder>()
-            //     .HasKey(c => new
-            //     {
-            //         c.CartId,
-            //         c.OrderId
-            //     });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

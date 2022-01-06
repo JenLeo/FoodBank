@@ -30,9 +30,7 @@
         <th>
             <a asp-action="Index" asp-route-sortOrder="@ViewData["OrganisationSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Deliver To</a>
         </th>
-        @*<th>
-            <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Status</a>
-        </th>*@
+      
 
             <th></th>
         </tr>
@@ -56,10 +54,7 @@
             <td>
                 @Html.DisplayFor(modelItem => ord.Organisation.OrganisationName)
             </td>
-            @*<td>
-
-                @Html.DisplayFor(modelItem => ord.OrderStatus)
-            </td>*@
+           
 
 
             <td>
